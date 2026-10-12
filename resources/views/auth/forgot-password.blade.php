@@ -1,25 +1,37 @@
+@section('title', __('Forgot Password'))
+
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+    <div class="text-center mb-8">
+        <h2 class="font-serif text-3xl sm:text-4xl font-normal text-black dark:text-white tracking-tight">
+            {{ __('Forgot Password') }}
+        </h2>
+        <p class="mt-2 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+            {{ __('Enter your email address and we will send you a password reset link') }}
+        </p>
     </div>
 
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+    <x-auth-session-status class="mb-5" :status="session('status')" />
 
-    <form method="POST" action="{{ route('password.email') }}">
+    <form method="POST" action="{{ route('password.email') }}" class="space-y-4">
         @csrf
 
-        <!-- Email Address -->
         <div>
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <x-text-input id="email" type="email" name="email" :value="old('email')" placeholder="{{ __('Enter your email') }}" required autofocus />
+            <x-input-error :messages="$errors->get('email')" class="mt-1.5" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
+        <div class="pt-2">
             <x-primary-button>
                 {{ __('Email Password Reset Link') }}
             </x-primary-button>
         </div>
     </form>
+
+    <div class="mt-8 text-center text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+        {{ __('Remember your password?') }}
+        <a href="{{ route('login') }}" class="font-bold text-black dark:text-white hover:text-[#C89B3C] dark:hover:text-[#C89B3C] transition-colors ms-1">
+            {{ __('Sign In') }}
+        </a>
+    </div>
 </x-guest-layout>

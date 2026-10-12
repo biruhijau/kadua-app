@@ -1,24 +1,44 @@
+@section('title', __('Confirm Password'))
+
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
+    <div class="text-center mb-8">
+        <h2 class="font-serif text-3xl sm:text-4xl font-normal text-black dark:text-white tracking-tight">
+            {{ __('Confirm Password') }}
+        </h2>
+        <p class="mt-2 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+            {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
+        </p>
     </div>
 
-    <form method="POST" action="{{ route('password.confirm') }}">
+    <form method="POST" action="{{ route('password.confirm') }}" class="space-y-4">
         @csrf
 
-        <!-- Password -->
-        <div>
+        <div x-data="{ show: false }">
             <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+            <div class="relative">
+                <input
+                    id="password"
+                    :type="show ? 'text' : 'password'"
+                    name="password"
+                    placeholder="{{ __('Enter your password') }}"
+                    required
+                    autocomplete="current-password"
+                    class="w-full bg-[#F3F4F6] dark:bg-[#1F2937] text-black dark:text-white border-0 border-transparent rounded-lg px-4 py-3 pe-11 text-sm placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#C89B3C] dark:focus:ring-[#C89B3C] transition-all duration-150"
+                />
+                <button
+                    type="button"
+                    @click="show = !show"
+                    class="absolute inset-y-0 end-0 flex items-center pe-3.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors cursor-pointer focus:outline-none"
+                    aria-label="Toggle password visibility"
+                >
+                    <x-icon-eye x-show="!show" class="h-5 w-5" />
+                    <x-icon-eye-off x-show="show" x-cloak class="h-5 w-5" />
+                </button>
+            </div>
+            <x-input-error :messages="$errors->get('password')" class="mt-1.5" />
         </div>
 
-        <div class="flex justify-end mt-4">
+        <div class="pt-2">
             <x-primary-button>
                 {{ __('Confirm') }}
             </x-primary-button>

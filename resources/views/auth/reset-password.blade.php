@@ -1,36 +1,77 @@
+@section('title', __('Reset Password'))
+
 <x-guest-layout>
-    <form method="POST" action="{{ route('password.store') }}">
+    <div class="text-center mb-8">
+        <h2 class="font-serif text-3xl sm:text-4xl font-normal text-black dark:text-white tracking-tight">
+            {{ __('Reset Password') }}
+        </h2>
+        <p class="mt-2 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+            {{ __('Create a new secure password for your account') }}
+        </p>
+    </div>
+
+    <form method="POST" action="{{ route('password.store') }}" class="space-y-4">
         @csrf
 
-        <!-- Password Reset Token -->
         <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
-        <!-- Email Address -->
         <div>
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <x-text-input id="email" type="email" name="email" :value="old('email', $request->email)" placeholder="{{ __('Enter your email') }}" required autofocus autocomplete="username" />
+            <x-input-error :messages="$errors->get('email')" class="mt-1.5" />
         </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div x-data="{ show: false }">
+            <x-input-label for="password" :value="__('New Password')" />
+            <div class="relative">
+                <input
+                    id="password"
+                    :type="show ? 'text' : 'password'"
+                    name="password"
+                    placeholder="{{ __('Enter new password') }}"
+                    required
+                    autocomplete="new-password"
+                    class="w-full bg-[#F3F4F6] dark:bg-[#1F2937] text-black dark:text-white border-0 border-transparent rounded-lg px-4 py-3 pe-11 text-sm placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#C89B3C] dark:focus:ring-[#C89B3C] transition-all duration-150"
+                />
+                <button
+                    type="button"
+                    @click="show = !show"
+                    class="absolute inset-y-0 end-0 flex items-center pe-3.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors cursor-pointer focus:outline-none"
+                    aria-label="Toggle password visibility"
+                >
+                    <x-icon-eye x-show="!show" class="h-5 w-5" />
+                    <x-icon-eye-off x-show="show" x-cloak class="h-5 w-5" />
+                </button>
+            </div>
+            <x-input-error :messages="$errors->get('password')" class="mt-1.5" />
         </div>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
+        <div x-data="{ show: false }">
             <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                                type="password"
-                                name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+            <div class="relative">
+                <input
+                    id="password_confirmation"
+                    :type="show ? 'text' : 'password'"
+                    name="password_confirmation"
+                    placeholder="{{ __('Confirm new password') }}"
+                    required
+                    autocomplete="new-password"
+                    class="w-full bg-[#F3F4F6] dark:bg-[#1F2937] text-black dark:text-white border-0 border-transparent rounded-lg px-4 py-3 pe-11 text-sm placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#C89B3C] dark:focus:ring-[#C89B3C] transition-all duration-150"
+                />
+                <button
+                    type="button"
+                    @click="show = !show"
+                    class="absolute inset-y-0 end-0 flex items-center pe-3.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors cursor-pointer focus:outline-none"
+                    aria-label="Toggle confirm password visibility"
+                >
+                    <x-icon-eye x-show="!show" class="h-5 w-5" />
+                    <x-icon-eye-off x-show="show" x-cloak class="h-5 w-5" />
+                </button>
+            </div>
+            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-1.5" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
+        <div class="pt-2">
             <x-primary-button>
                 {{ __('Reset Password') }}
             </x-primary-button>
