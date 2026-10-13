@@ -35,7 +35,7 @@
                     placeholder="{{ __('Create a password') }}"
                     required
                     autocomplete="new-password"
-                    class="w-full bg-[#F3F4F6] dark:bg-[#1F2937] text-black dark:text-white border-0 border-transparent rounded-lg px-4 py-3 pe-11 text-sm placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#C89B3C] dark:focus:ring-[#C89B3C] transition-all duration-150"
+                    class="w-full rounded-lg border border-black/5 bg-[#F3F4F6] px-4 py-3 pe-11 text-sm text-black placeholder:text-black/35 focus:border-[#C89B3C] focus:outline-none focus:ring-2 focus:ring-[#C89B3C]/30 dark:border-white/10 dark:bg-[#1F1F1F] dark:text-white dark:placeholder:text-white/35 transition-all duration-150"
                 />
                 <button
                     type="button"
@@ -60,7 +60,7 @@
                     placeholder="{{ __('Confirm your password') }}"
                     required
                     autocomplete="new-password"
-                    class="w-full bg-[#F3F4F6] dark:bg-[#1F2937] text-black dark:text-white border-0 border-transparent rounded-lg px-4 py-3 pe-11 text-sm placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#C89B3C] dark:focus:ring-[#C89B3C] transition-all duration-150"
+                    class="w-full rounded-lg border border-black/5 bg-[#F3F4F6] px-4 py-3 pe-11 text-sm text-black placeholder:text-black/35 focus:border-[#C89B3C] focus:outline-none focus:ring-2 focus:ring-[#C89B3C]/30 dark:border-white/10 dark:bg-[#1F1F1F] dark:text-white dark:placeholder:text-white/35 transition-all duration-150"
                 />
                 <button
                     type="button"
