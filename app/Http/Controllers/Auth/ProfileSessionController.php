@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
 use App\Actions\Profile\LoadProfileSessionsAction;
 use App\Actions\Profile\RevokeOtherSessionsAction;
 use App\Actions\Profile\RevokeProfileSessionAction;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;

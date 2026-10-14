@@ -27,6 +27,35 @@ class Navigation extends Component
                 'permission' => null,
                 'children' => [],
             ],
+            [
+                'label' => __('Internal'),
+                'href' => '#',
+                'active' => false,
+                'permission' => null,
+                'children' => [
+                    [
+                        'label' => __('Pengguna'),
+                        'href' => route('internal.users.index'),
+                        'active' => request()->routeIs('internal.users.*'),
+                        'permission' => null,
+                        'children' => [],
+                    ],
+                    [
+                        'label' => __('Peran'),
+                        'href' => route('internal.role.index'),
+                        'active' => request()->routeIs('internal.role.*'),
+                        'permission' => null,
+                        'children' => [],
+                    ],
+                    [
+                        'label' => __('Izin Akses'),
+                        'href' => route('internal.permissions.index'),
+                        'active' => request()->routeIs('internal.permissions.*'),
+                        'permission' => null,
+                        'children' => [],
+                    ],
+                ],
+            ],
         ];
     }
 
