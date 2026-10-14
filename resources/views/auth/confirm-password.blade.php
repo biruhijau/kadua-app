@@ -31,8 +31,8 @@
                     class="absolute inset-y-0 end-0 flex items-center pe-3.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors cursor-pointer focus:outline-none"
                     aria-label="Toggle password visibility"
                 >
-                    <x-icon-eye x-show="!show" class="h-5 w-5" />
-                    <x-icon-eye-off x-show="show" x-cloak class="h-5 w-5" />
+                    <x-lucide-eye x-show="!show" class="h-5 w-5" />
+                    <x-lucide-eye-off x-show="show" x-cloak class="h-5 w-5" />
                 </button>
             </div>
             <x-input-error :messages="$errors->get('password')" class="mt-1.5" />

@@ -16,7 +16,7 @@
                     class="inline-flex h-full items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-black/60 transition hover:bg-black/5 hover:text-black focus:outline-none focus:ring-0 dark:text-white/60 dark:hover:bg-white/10 dark:hover:text-white"
                 >
                     {{ $item['label'] }}
-                    <x-icon-chevron-down x-bind:class="{ 'rotate-180': submenu }" class="h-4 w-4 shrink-0 transition-transform" />
+                    <x-lucide-chevron-down x-bind:class="{ 'rotate-180': submenu }" class="h-4 w-4 shrink-0 transition-transform" />
                 </button>
 
                 <div

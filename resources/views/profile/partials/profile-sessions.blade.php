@@ -60,7 +60,7 @@
                             title="{{ __('Keluarkan perangkat ini') }}"
                             class="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-red-200/70 bg-red-50 text-red-700 transition hover:border-red-300 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-400/40 focus:ring-offset-2 dark:border-red-400/20 dark:bg-red-400/10 dark:text-red-300 dark:hover:bg-red-400/20 dark:focus:ring-offset-black"
                         >
-                            <x-icon-logout class="h-5 w-5" aria-hidden="true" />
+                            <x-lucide-log-out class="h-5 w-5" aria-hidden="true" />
                         </button>
                     </div>
 

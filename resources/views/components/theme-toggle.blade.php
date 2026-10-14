@@ -28,20 +28,20 @@
         x-bind:class="theme === 'light' ? 'bg-white dark:bg-neutral-800 text-black dark:text-white shadow-xs' : 'text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300'"
         class="flex h-8 min-w-[2rem] flex-1 cursor-pointer items-center justify-center rounded-full transition-all duration-150 focus:outline-none"
         title="{{ __('Light theme') }}" aria-label="{{ __('Light theme') }}">
-        <x-icon-sun class="w-4 h-4" />
+        <x-lucide-sun class="w-4 h-4" />
     </button>
 
     <button type="button" x-on:click="setTheme('dark')"
         x-bind:class="theme === 'dark' ? 'bg-white dark:bg-neutral-800 text-black dark:text-white shadow-xs' : 'text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300'"
         class="flex h-8 min-w-[2rem] flex-1 cursor-pointer items-center justify-center rounded-full transition-all duration-150 focus:outline-none"
         title="{{ __('Dark theme') }}" aria-label="{{ __('Dark theme') }}">
-        <x-icon-moon class="w-4 h-4" />
+        <x-lucide-moon class="w-4 h-4" />
     </button>
 
     <button type="button" x-on:click="setTheme('auto')"
         x-bind:class="theme === 'auto' ? 'bg-white dark:bg-neutral-800 text-black dark:text-white shadow-xs' : 'text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300'"
         class="flex h-8 min-w-[2rem] flex-1 cursor-pointer items-center justify-center rounded-full transition-all duration-150 focus:outline-none"
         title="{{ __('Auto / System theme') }}" aria-label="{{ __('Auto / System theme') }}">
-        <x-icon-computer-desktop class="w-4 h-4" />
+        <x-lucide-monitor class="w-4 h-4" />
     </button>
 </div>
