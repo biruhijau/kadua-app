@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Internal;
+namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
 use Illuminate\View\View;
@@ -9,6 +9,6 @@ class RoleManagementController extends Controller
 {
     public function index(): View
     {
-        return view('pages.internal.role.index');
+        return view('pages.settings.role.index');
     }
 }
