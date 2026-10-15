@@ -10,11 +10,8 @@
             </p>
 
             @if ($sessions['has_other_sessions'])
-                <button
-                    type="button"
-                    x-on:click.prevent="$dispatch('open-modal', { name: 'revoke-all-sessions' })"
-                    class="inline-flex w-full items-center justify-center rounded-lg border border-red-200/70 bg-red-50 px-4 py-2.5 text-sm font-medium text-red-700 transition hover:border-red-300 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-400/40 focus:ring-offset-2 dark:border-red-400/20 dark:bg-red-400/10 dark:text-red-300 dark:hover:bg-red-400/20 dark:focus:ring-offset-black sm:w-auto"
-                >
+                <button type="button" x-on:click.prevent="$dispatch('open-modal', { name: 'revoke-all-sessions' })"
+                    class="inline-flex w-full items-center justify-center rounded-lg border border-red-200/70 bg-red-50 px-4 py-2.5 text-sm font-medium text-red-700 transition hover:border-red-300 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-400/40 focus:ring-offset-2 dark:border-red-400/20 dark:bg-red-400/10 dark:text-red-300 dark:hover:bg-red-400/20 dark:focus:ring-offset-black sm:w-auto">
                     {{ __('Keluarkan semua') }}
                 </button>
             @endif
@@ -23,7 +20,8 @@
 
     <div class="mt-6 space-y-3">
         @forelse ($sessions['visible'] as $session)
-            <div class="flex items-start gap-3 rounded-xl border border-black/5 bg-[#F8F7F4]/70 p-4 dark:border-white/10 dark:bg-white/[0.03] sm:items-center sm:p-5">
+            <div
+                class="flex items-start gap-3 rounded-xl border border-black/5 bg-[#F8F7F4]/70 p-4 dark:border-white/10 dark:bg-white/[0.03] sm:items-center sm:p-5">
                 <div class="flex min-w-0 flex-1 items-center gap-4">
                     <x-profile-session-device :user-agent="$session['user_agent']" />
                     <div class="min-w-0">
@@ -33,11 +31,13 @@
                             </p>
 
                             @if ($session['is_current'])
-                                <span class="rounded-full bg-black/5 px-2 py-0.5 text-xs font-medium text-black/60 dark:bg-white/10 dark:text-white/65">
+                                <span
+                                    class="rounded-full bg-black/5 px-2 py-0.5 text-xs font-medium text-black/60 dark:bg-white/10 dark:text-white/65">
                                     {{ __('Perangkat ini') }}
                                 </span>
                             @elseif ($session['is_expired'])
-                                <span class="rounded-full bg-black/5 px-2 py-0.5 text-xs font-medium text-black/45 dark:bg-white/10 dark:text-white/45">
+                                <span
+                                    class="rounded-full bg-black/5 px-2 py-0.5 text-xs font-medium text-black/45 dark:bg-white/10 dark:text-white/45">
                                     {{ __('Kadaluarsa') }}
                                 </span>
                             @endif
@@ -51,20 +51,18 @@
                     </div>
                 </div>
 
-                @if (! $session['is_current'])
+                @if (!$session['is_current'])
                     <div class="ml-auto shrink-0">
-                        <button
-                            type="button"
+                        <button type="button"
                             x-on:click.prevent="$dispatch('open-modal', { name: 'revoke-session-{{ $session['id'] }}' })"
-                            aria-label="{{ __('Keluarkan perangkat ini') }}"
-                            title="{{ __('Keluarkan perangkat ini') }}"
-                            class="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-red-200/70 bg-red-50 text-red-700 transition hover:border-red-300 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-400/40 focus:ring-offset-2 dark:border-red-400/20 dark:bg-red-400/10 dark:text-red-300 dark:hover:bg-red-400/20 dark:focus:ring-offset-black"
-                        >
+                            aria-label="{{ __('Keluarkan perangkat ini') }}" title="{{ __('Keluarkan perangkat ini') }}"
+                            class="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-red-200/70 bg-red-50 text-red-700 transition hover:border-red-300 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-400/40 focus:ring-offset-2 dark:border-red-400/20 dark:bg-red-400/10 dark:text-red-300 dark:hover:bg-red-400/20 dark:focus:ring-offset-black">
                             <x-lucide-log-out class="h-5 w-5" aria-hidden="true" />
                         </button>
                     </div>
 
-                    <x-modal name="revoke-session-{{ $session['id'] }}" :show="$errors->getBag('sessionRevocation-'.$session['id'])->isNotEmpty()" focusable>
+                    <x-modal name="revoke-session-{{ $session['id'] }}"
+                        :show="$errors->getBag('sessionRevocation-' . $session['id'])->isNotEmpty()" focusable>
                         <form method="POST" action="{{ route('profile.sessions.destroy', $session['id']) }}" class="p-6">
                             @csrf
                             @method('delete')
@@ -78,13 +76,18 @@
                             </p>
 
                             <div class="mt-6">
-                                <x-input-label for="session_password_{{ $session['id'] }}" :value="__('Kata sandi')" class="sr-only" />
-                                <x-text-input id="session_password_{{ $session['id'] }}" name="password" type="password" class="block w-full" placeholder="{{ __('Kata sandi saat ini') }}" autocomplete="current-password" />
-                                <x-input-error :messages="$errors->getBag('sessionRevocation-'.$session['id'])->get('password')" class="mt-2" />
+                                <x-input-label for="session_password_{{ $session['id'] }}" :value="__('Kata sandi')"
+                                    class="sr-only" />
+                                <x-text-input id="session_password_{{ $session['id'] }}" name="password" type="password"
+                                    class="block w-full" placeholder="{{ __('Kata sandi saat ini') }}"
+                                    autocomplete="current-password" />
+                                <x-input-error :messages="$errors->getBag('sessionRevocation-' . $session['id'])->get('password')"
+                                    class="mt-2" />
                             </div>
 
                             <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-                                <x-secondary-button x-on:click="$dispatch('close-modal', { name: 'revoke-session-{{ $session['id'] }}' })">
+                                <x-secondary-button
+                                    x-on:click="$dispatch('close-modal', { name: 'revoke-session-{{ $session['id'] }}' })">
                                     {{ __('Batal') }}
                                 </x-secondary-button>
 
@@ -125,7 +128,8 @@
 
                 <div class="mt-6">
                     <x-input-label for="revoke_all_password" :value="__('Kata sandi')" class="sr-only" />
-                    <x-text-input id="revoke_all_password" name="password" type="password" class="block w-full" placeholder="{{ __('Kata sandi saat ini') }}" autocomplete="current-password" />
+                    <x-text-input id="revoke_all_password" name="password" type="password" class="block w-full"
+                        placeholder="{{ __('Kata sandi saat ini') }}" autocomplete="current-password" />
                     <x-input-error :messages="$errors->sessionRevocationAll->get('password')" class="mt-2" />
                 </div>
 

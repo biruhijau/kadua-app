@@ -13,7 +13,9 @@
                 <div class="mt-2 space-y-2">
                     @foreach ($group['permissions'] as $permission)
                         <label class="flex items-center gap-3 text-sm text-black/70 dark:text-white/70">
-                            <input type="checkbox" name="permissions[]" value="{{ $permission['id'] }}" @checked(in_array($permission['id'], $selected, true)) class="rounded border-black/20 text-[#C89B3C] focus:ring-[#C89B3C] dark:border-white/20 dark:bg-neutral-900" />
+                            <input type="checkbox" name="permissions[]" value="{{ $permission['id'] }}"
+                                @checked(in_array($permission['id'], $selected, true))
+                                class="rounded border-black/20 text-[#C89B3C] focus:ring-[#C89B3C] dark:border-white/20 dark:bg-neutral-900" />
                             <span>{{ $permission['label'] }}</span>
                         </label>
                     @endforeach

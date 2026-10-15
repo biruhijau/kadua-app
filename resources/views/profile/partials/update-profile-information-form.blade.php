@@ -19,7 +19,8 @@
 
         <div>
             <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
+            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)"
+                required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
@@ -28,12 +29,13 @@
             <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
-            @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
+            @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !$user->hasVerifiedEmail())
                 <div>
                     <p class="mt-2 text-sm text-black/80 dark:text-white/80">
                         {{ __('Your email address is unverified.') }}
 
-                        <button form="send-verification" class="rounded-md text-sm text-black/55 underline hover:text-[#C89B3C] dark:text-white/55 dark:hover:text-[#C89B3C] focus:outline-none focus:ring-2 focus:ring-[#C89B3C] focus:ring-offset-2 dark:focus:ring-offset-black">
+                        <button form="send-verification"
+                            class="rounded-md text-sm text-black/55 underline hover:text-[#C89B3C] dark:text-white/55 dark:hover:text-[#C89B3C] focus:outline-none focus:ring-2 focus:ring-[#C89B3C] focus:ring-offset-2 dark:focus:ring-offset-black">
                             {{ __('Click here to re-send the verification email.') }}
                         </button>
                     </p>

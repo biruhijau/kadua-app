@@ -20,8 +20,7 @@
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
             if (theme === 'auto') applyTheme();
         });
-    "
-    x-on:click.stop
+    " x-on:click.stop
     class="{{ $fullWidth ? 'w-full' : 'w-[9.5rem]' }} flex shrink-0 items-center rounded-full border border-neutral-200 bg-neutral-100 p-1 transition-colors dark:border-neutral-800 dark:bg-neutral-900"
     role="group" aria-label="{{ __('Theme switcher') }}">
     <button type="button" x-on:click="setTheme('light')"

@@ -36,7 +36,7 @@
 
     $shouldRender = $confirm || $resolvedType !== null;
 
-    if ($shouldRender && $resolvedText === null && $title === null && ! $confirm) {
+    if ($shouldRender && $resolvedText === null && $title === null && !$confirm) {
         $shouldRender = false;
     }
 
@@ -54,7 +54,7 @@
         'danger' => (bool) $danger,
     ];
 
-    $payload = array_filter($payload, fn ($value) => $value !== null && $value !== false);
+    $payload = array_filter($payload, fn($value) => $value !== null && $value !== false);
 @endphp
 
 @if ($shouldRender)

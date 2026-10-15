@@ -42,7 +42,9 @@
     <div class="min-h-screen w-full flex flex-col justify-center items-center px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
         <div class="w-full max-w-[420px] mx-auto">
             <div class="flex justify-center mb-6">
-                <a href="{{ route('login') }}" class="inline-block select-none outline-none focus:outline-none focus:ring-0" oncontextmenu="return false;">
+                <a href="{{ route('login') }}"
+                    class="inline-block select-none outline-none focus:outline-none focus:ring-0"
+                    oncontextmenu="return false;">
                     <img src="{{ asset('images/kadua_light-mode.png') }}" alt="KADUA BY AMARTHA" draggable="false"
                         oncontextmenu="return false;"
                         class="pointer-events-none block h-16 w-auto max-w-[200px] select-none object-contain sm:h-20 sm:max-w-[240px] md:h-24 dark:hidden" />
