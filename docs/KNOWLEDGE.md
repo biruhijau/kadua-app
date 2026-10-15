@@ -10,6 +10,7 @@ Sections:
 2. Permission Enum (Extending Permissions)
 3. Reusable Datatable
 4. SweetAlert2 Alerts
+5. Component Catalog
 
 ---
 
@@ -172,33 +173,35 @@ role. The seeder is idempotent — running it again only adds what is missing.
 ## 3. Reusable Datatable
 
 The datatable is a headless set of Blade components under
-`resources/views/components/datatable/`. It has no JS dependency for its core
-structure; layout is handled by Tailwind and the dropdown uses Alpine.
+`resources/views/components/` (the `table.blade.php` entry point plus the
+`table/` folder). It has no JS dependency for its core structure; layout is
+handled by Tailwind and the dropdown uses Alpine.
 
 ```text
-datatable/
-├── table.blade.php            → x-datatable.table      (entry point / wrapper)
-├── toolbar.blade.php          → x-datatable.toolbar    (GET form)
-├── search.blade.php           → x-datatable.search     (search input)
-├── filter.blade.php           → x-datatable.filter     (dropdown filter)
-├── reset.blade.php            → x-datatable.reset      (X reset button)
-└── actions/
-    ├── menu.blade.php         → x-datatable.actions.menu   (⋮ dropdown container)
-    └── item.blade.php         → x-datatable.actions.item   (single action row)
+components/
+├── table.blade.php            → x-table            (entry point / wrapper)
+└── table/
+    ├── toolbar.blade.php      → x-table.toolbar    (GET form)
+    ├── search.blade.php       → x-table.search     (search input)
+    ├── filter.blade.php       → x-table.filter     (dropdown filter)
+    ├── reset.blade.php        → x-table.reset      (X reset button)
+    └── actions/
+        ├── menu.blade.php     → x-table.actions.menu   (⋮ dropdown container)
+        └── item.blade.php     → x-table.actions.item   (single action row)
 ```
 
 ### 3.1 Minimal Skeleton
 
 ```blade
-<x-datatable.table :has-data="$models->isNotEmpty()">
+<x-table :has-data="$models->isNotEmpty()">
     <x-slot name="toolbar">
-        <x-datatable.toolbar :action="route('settings.models.index')">
-            <x-datatable.search :value="$search" :placeholder="__('Cari...')" />
-            <x-datatable.filter name="status" :selected="$status" :options="[...]" />
+        <x-table.toolbar :action="route('settings.models.index')">
+            <x-table.search :value="$search" :placeholder="__('Cari...')" />
+            <x-table.filter name="status" :selected="$status" :options="[...]" />
             @if ($search !== '' || $status !== '')
-                <x-datatable.reset :href="route('settings.models.index')" />
+                <x-table.reset :href="route('settings.models.index')" />
             @endif
-        </x-datatable.toolbar>
+        </x-table.toolbar>
     </x-slot>
 
     <x-slot name="head">
@@ -213,11 +216,11 @@ datatable/
             <tr class="text-black/75 dark:text-white/75">
                 <td class="whitespace-nowrap px-6 py-4">{{ $model->name }}</td>
                 <td class="px-6 py-4">
-                    <x-datatable.actions.menu>
-                        <x-datatable.actions.item :href="route('settings.models.edit', $model)" icon="pencil">
+                    <x-table.actions.menu>
+                        <x-table.actions.item :href="route('settings.models.edit', $model)" icon="pencil">
                             {{ __('Edit') }}
-                        </x-datatable.actions.item>
-                    </x-datatable.actions.menu>
+                        </x-table.actions.item>
+                    </x-table.actions.menu>
                 </td>
             </tr>
         @endforeach
@@ -228,10 +231,10 @@ datatable/
     @if ($models->hasPages())
         <x-slot name="pagination">{{ $models->links() }}</x-slot>
     @endif
-</x-datatable.table>
+</x-table>
 ```
 
-### 3.2 `x-datatable.table` (entry point)
+### 3.2 `x-table` (entry point)
 
 | Prop | Type | Default | Purpose |
 | --- | --- | --- | --- |
@@ -248,13 +251,13 @@ Slots: `toolbar`, `head`, `body`, `empty`, `pagination`.
 
 ### 3.3 Toolbar, Search, Filter, Reset
 
-`x-datatable.toolbar` is a `GET` form; it takes a single `action` prop.
+`x-table.toolbar` is a `GET` form; it takes a single `action` prop.
 
 ```blade
-<x-datatable.toolbar :action="route('settings.models.index')"> ... </x-datatable.toolbar>
+<x-table.toolbar :action="route('settings.models.index')"> ... </x-table.toolbar>
 ```
 
-`x-datatable.search`:
+`x-table.search`:
 
 | Prop | Default | Purpose |
 | --- | --- | --- |
@@ -262,7 +265,7 @@ Slots: `toolbar`, `head`, `body`, `empty`, `pagination`.
 | `value` | `''` | Current value (from controller). |
 | `placeholder` | `Cari...` | Placeholder text. |
 
-`x-datatable.filter` (a custom Alpine dropdown, not a native `<select>`):
+`x-table.filter` (a custom Alpine dropdown, not a native `<select>`):
 
 | Prop | Default | Purpose |
 | --- | --- | --- |
@@ -274,29 +277,29 @@ Slots: `toolbar`, `head`, `body`, `empty`, `pagination`.
 Selecting an option **submits the toolbar form immediately** (no Filter
 button). The selected key is compared as a string, so `0`/`'0'` match.
 
-`x-datatable.reset` renders an icon-only reset link. Show it only when a filter
+`x-table.reset` renders an icon-only reset link. Show it only when a filter
 or search is active:
 
 ```blade
 @if ($search !== '' || $status !== '')
-    <x-datatable.reset :href="route('settings.models.index')" />
+    <x-table.reset :href="route('settings.models.index')" />
 @endif
 ```
 
 ### 3.4 Action Menu
 
-`x-datatable.actions.menu` is the `⋮` trigger plus the dropdown panel. It uses
+`x-table.actions.menu` is the `⋮` trigger plus the dropdown panel. It uses
 `x-teleport="body"` so the panel is never clipped by the table's scroll
 container. The position is clamped to the viewport (it opens upward when there
 is not enough space below).
 
 ```blade
-<x-datatable.actions.menu>
+<x-table.actions.menu>
     ... items ...
-</x-datatable.actions.menu>
+</x-table.actions.menu>
 ```
 
-`x-datatable.actions.item` props:
+`x-table.actions.item` props:
 
 | Prop | Type | Default | Purpose |
 | --- | --- | --- | --- |
@@ -313,21 +316,21 @@ Examples:
 
 ```blade
 {{-- Link action --}}
-<x-datatable.actions.item :href="route('settings.users.edit', $user)" icon="pencil">
+<x-table.actions.item :href="route('settings.users.edit', $user)" icon="pencil">
     {{ __('Edit') }}
-</x-datatable.actions.item>
+</x-table.actions.item>
 
 {{-- Destructive form action with SweetAlert2 confirmation --}}
-<x-datatable.actions.item
+<x-table.actions.item
     :action="route('settings.users.destroy', $user)"
     method="delete" icon="trash-2" danger :confirm="__('Hapus pengguna ini?')">
     {{ __('Hapus') }}
-</x-datatable.actions.item>
+</x-table.actions.item>
 
 {{-- Download action (generic — no form needed) --}}
-<x-datatable.actions.item :href="route('settings.reports.export')" icon="download" download>
+<x-table.actions.item :href="route('settings.reports.export')" icon="download" download>
     {{ __('Unduh') }}
-</x-datatable.actions.item>
+</x-table.actions.item>
 ```
 
 ### 3.5 Controller Conventions
@@ -363,25 +366,25 @@ routes must be protected separately (see 1.4).
 ```blade
 @can('models.create')
     <div class="mb-4 flex justify-end">
-        <x-primary-button onclick="window.location='{{ route('settings.models.create') }}'">
+        <x-form.button-primary onclick="window.location='{{ route('settings.models.create') }}'">
             {{ __('Tambah') }}
-        </x-primary-button>
+        </x-form.button-primary>
     </div>
 @endcan
 
-<x-datatable.actions.menu>
+<x-table.actions.menu>
     @can('models.update')
-        <x-datatable.actions.item :href="route('settings.models.edit', $model)" icon="pencil">
+        <x-table.actions.item :href="route('settings.models.edit', $model)" icon="pencil">
             {{ __('Edit') }}
-        </x-datatable.actions.item>
+        </x-table.actions.item>
     @endcan
     @can('models.delete')
-        <x-datatable.actions.item :action="route('settings.models.destroy', $model)"
+        <x-table.actions.item :action="route('settings.models.destroy', $model)"
             method="delete" icon="trash-2" danger :confirm="__('Hapus data ini?')">
             {{ __('Hapus') }}
-        </x-datatable.actions.item>
+        </x-table.actions.item>
     @endcan
-</x-datatable.actions.menu>
+</x-table.actions.menu>
 ```
 
 Reference implementation: `resources/views/pages/settings/user/index.blade.php`
@@ -392,7 +395,7 @@ and `resources/views/pages/settings/role/index.blade.php`.
 ## 4. SweetAlert2 Alerts
 
 SweetAlert2 handles confirmations and flash notifications. All helpers live in
-`resources/js/app.js`; the Blade entry point is `x-alert.sweetalert`.
+`resources/js/app.js`; the Blade entry point is `x-feedback.alert`.
 
 ### 4.1 Global Helpers (JavaScript)
 
@@ -431,19 +434,19 @@ window.notify('success', 'Tersimpan', 'Data berhasil disimpan.');
 ```
 
 > **Important:** `@js()` is NOT compiled inside a component attribute string
-> (e.g. `x-on:click` on `<x-secondary-button>`). Put the logic inside an
+> (e.g. `x-on:click` on `<x-form.button-secondary>`). Put the logic inside an
 > `x-data` block instead, where `@js()` works correctly.
 
 ### 4.2 The Blade Component
 
-`resources/views/components/alert/sweetalert.blade.php` is **non-visual** — it
+`resources/views/components/feedback/alert.blade.php` is **non-visual** — it
 renders a `<span data-swal>` that `app.js` picks up on `DOMContentLoaded`. It
 supports three usage modes.
 
 #### Mode A — Flash driver (one per layout)
 
 ```blade
-<x-alert.sweetalert :status="session('status')" />
+<x-feedback.alert :status="session('status')" />
 ```
 
 Already placed once in `resources/views/layouts/app.blade.php`. It maps the
@@ -463,16 +466,16 @@ return to_route('settings.models.index')->with('status', 'model-created');
 #### Mode B — Explicit notification
 
 ```blade
-<x-alert.sweetalert type="success" :text="__('Data berhasil disimpan.')" />
-<x-alert.sweetalert type="error" :title="__('Gagal')" :text="__('Terjadi kesalahan.')" />
-<x-alert.sweetalert type="warning" :text="__('Periksa kembali data Anda.')" />
-<x-alert.sweetalert type="info" :text="__('Sesi Anda akan berakhir.')" />
+<x-feedback.alert type="success" :text="__('Data berhasil disimpan.')" />
+<x-feedback.alert type="error" :title="__('Gagal')" :text="__('Terjadi kesalahan.')" />
+<x-feedback.alert type="warning" :text="__('Periksa kembali data Anda.')" />
+<x-feedback.alert type="info" :text="__('Sesi Anda akan berakhir.')" />
 ```
 
 #### Mode C — Confirmation
 
 ```blade
-<x-alert.sweetalert confirm :title="__('Hapus data ini?')" danger />
+<x-feedback.alert confirm :title="__('Hapus data ini?')" danger />
 ```
 
 Props:
@@ -519,9 +522,9 @@ Create/Edit forms warn before leaving with unsaved changes. The pattern:
     x-on:submit="dirty = false"
 >
     ...
-    <x-secondary-button type="button" x-on:click.prevent="cancelForm()">
+    <x-form.button-secondary type="button" x-on:click.prevent="cancelForm()">
         {{ __('Batal') }}
-    </x-secondary-button>
+    </x-form.button-secondary>
 </form>
 ```
 
@@ -530,7 +533,75 @@ and `resources/views/pages/settings/role/{create,edit}.blade.php`.
 
 ### 4.4 Delete Confirmation Flow
 
-`x-datatable.actions.item` with `:confirm` handles this automatically. The form
+`x-table.actions.item` with `:confirm` handles this automatically. The form
 submits via `HTMLFormElement.prototype.submit.call($el)` — a native submit that
 does **not** re-fire the `submit` event, avoiding an infinite loop. You do not
 need to wire anything extra.
+
+---
+
+## 5. Component Catalog
+
+All Blade components live under `resources/views/components/`, grouped by
+purpose. Class components (`AppLayout`, `GuestLayout`, `Navigation`,
+`ProfileSessionDevice`) are in `app/View/Components/` and are referenced by
+their class name, not the view path.
+
+```text
+components/
+├── navigation/
+│   ├── navbar.blade.php          → x-navigation         (navbar; class component)
+│   ├── desktop-menu.blade.php    → partial (@include)
+│   ├── mobile-menu.blade.php     → partial (@include)
+│   ├── mobile-account.blade.php  → partial (@include)
+│   ├── profile-dropdown.blade.php→ partial (@include)
+│   ├── desktop-link.blade.php    → x-navigation.desktop-link
+│   └── mobile-link.blade.php     → x-navigation.mobile-link
+├── form/
+│   ├── input.blade.php           → x-form.input
+│   ├── label.blade.php           → x-form.label
+│   ├── error.blade.php           → x-form.error
+│   ├── button-primary.blade.php  → x-form.button-primary
+│   ├── button-secondary.blade.php→ x-form.button-secondary
+│   ├── button-danger.blade.php   → x-form.button-danger
+│   └── permission-fields.blade.php → x-form.permission-fields
+├── ui/
+│   ├── badge.blade.php           → x-ui.badge
+│   ├── modal.blade.php           → x-ui.modal
+│   ├── dropdown.blade.php        → x-ui.dropdown
+│   └── dropdown-item.blade.php   → x-ui.dropdown-item
+├── feedback/
+│   ├── alert.blade.php           → x-feedback.alert
+│   └── session-status.blade.php  → x-feedback.session-status
+├── table.blade.php               → x-table
+├── table/                        → x-table.toolbar / .search / .filter / .reset / .actions.*
+├── page/
+│   └── header.blade.php          → x-page.header
+├── theme/
+│   └── toggle.blade.php          → x-theme.toggle
+└── profile/
+    └── session-device.blade.php  → x-profile-session-device (class component)
+```
+
+| Component | Purpose |
+| --- | --- |
+| `x-form.input` | Styled text input (accent focus ring, dark mode). |
+| `x-form.label` | Form label (small uppercase). |
+| `x-form.error` | Validation error list. |
+| `x-form.button-primary` | Primary submit button. |
+| `x-form.button-secondary` | Secondary outline button (`type="button"` by default). |
+| `x-form.button-danger` | Destructive action button. |
+| `x-form.permission-fields` | Permission checkboxes grouped by feature (Role form). |
+| `x-ui.badge` | Small pill; `variant` (`primary` default) + `circle`. |
+| `x-ui.modal` | Alpine modal with focus trap and `open-modal`/`close-modal` events. |
+| `x-ui.dropdown` | Generic dropdown (trigger + panel). |
+| `x-ui.dropdown-item` | Dropdown link item; supports `danger`. |
+| `x-feedback.alert` | Non-visual SweetAlert2 trigger (see section 4). |
+| `x-feedback.session-status` | Plain auth status message. |
+| `x-table` (+ `x-table.*`) | Reusable datatable (see section 3). |
+| `x-page.header` | Page title + breadcrumb. |
+| `x-theme.toggle` | Light/Dark/Auto theme switcher. |
+| `x-navigation` | Main navbar (permission-aware menu). |
+| `x-navigation.desktop-link` | Desktop nav link with `active` state. |
+| `x-navigation.mobile-link` | Mobile nav link; supports `active` + `danger`. |
+| `x-profile-session-device` | Device icon (mobile/tablet/desktop) from user agent. |

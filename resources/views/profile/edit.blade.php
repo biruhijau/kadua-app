@@ -2,7 +2,7 @@
 
 <x-app-layout>
     <x-slot name="header">
-        <x-header.page :title="__('Profile')" :breadcrumbs="[
+        <x-page.header :title="__('Profile')" :breadcrumbs="[
         ['label' => __('Dashboard'), 'href' => route('dashboard')],
         ['label' => __('Profile')],
     ]" />

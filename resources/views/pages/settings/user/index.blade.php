@@ -2,7 +2,7 @@
 
 <x-app-layout>
     <x-slot name="header">
-        <x-header.page :title="__('Pengguna')" :breadcrumbs="[
+        <x-page.header :title="__('Pengguna')" :breadcrumbs="[
         ['label' => __('Pengaturan'), 'href' => '#', 'icon' => 'settings'],
         ['label' => __('Pengguna')],
     ]" />
@@ -12,23 +12,23 @@
         <div class="mx-auto max-w-7xl">
             @can('users.create')
                 <div class="mb-4 flex justify-end">
-                    <x-primary-button class="w-full sm:w-auto"
+                    <x-form.button-primary class="w-full sm:w-auto"
                         onclick="window.location='{{ route('settings.users.create') }}'">
                         <x-lucide-plus class="mr-2 h-4 w-4" />{{ __('Tambah') }}
-                    </x-primary-button>
+                    </x-form.button-primary>
                 </div>
             @endcan
 
-            <x-datatable.table :has-data="$users->isNotEmpty()">
+            <x-table :has-data="$users->isNotEmpty()">
                 <x-slot name="toolbar">
-                    <x-datatable.toolbar :action="route('settings.users.index')">
-                        <x-datatable.search :value="$search" :placeholder="__('Cari nama atau email...')" />
-                        <x-datatable.filter name="role" :selected="$role" :placeholder="__('Semua peran')"
+                    <x-table.toolbar :action="route('settings.users.index')">
+                        <x-table.search :value="$search" :placeholder="__('Cari nama atau email...')" />
+                        <x-table.filter name="role" :selected="$role" :placeholder="__('Semua peran')"
                             :options="$roles->pluck('name', 'name')->all()" />
                         @if ($search !== '' || $role !== '')
-                            <x-datatable.reset :href="route('settings.users.index')" />
+                            <x-table.reset :href="route('settings.users.index')" />
                         @endif
-                    </x-datatable.toolbar>
+                    </x-table.toolbar>
                 </x-slot>
 
                 <x-slot name="head">
@@ -50,7 +50,7 @@
                             <td class="px-6 py-4">
                                 <div class="flex flex-wrap gap-1">
                                     @forelse ($user->roles as $userRole)
-                                        <x-badge>{{ $userRole->name }}</x-badge>
+                                        <x-ui.badge>{{ $userRole->name }}</x-ui.badge>
                                     @empty
                                         <span
                                             class="whitespace-nowrap text-xs text-black/45 dark:text-white/45">{{ __('Tanpa peran') }}</span>
@@ -65,19 +65,19 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4">
-                                <x-datatable.actions.menu>
+                                <x-table.actions.menu>
                                     @can('users.update')
-                                        <x-datatable.actions.item :href="route('settings.users.edit', $user)" icon="pencil">
+                                        <x-table.actions.item :href="route('settings.users.edit', $user)" icon="pencil">
                                             {{ __('Edit') }}
-                                        </x-datatable.actions.item>
+                                        </x-table.actions.item>
                                     @endcan
                                     @can('users.delete')
-                                        <x-datatable.actions.item :action="route('settings.users.destroy', $user)"
+                                        <x-table.actions.item :action="route('settings.users.destroy', $user)"
                                             method="delete" icon="trash-2" danger :confirm="__('Hapus pengguna ini?')">
                                             {{ __('Hapus') }}
-                                        </x-datatable.actions.item>
+                                        </x-table.actions.item>
                                     @endcan
-                                </x-datatable.actions.menu>
+                                </x-table.actions.menu>
                             </td>
                         </tr>
                     @endforeach
@@ -88,7 +88,7 @@
                 @if ($users->hasPages())
                     <x-slot name="pagination">{{ $users->links() }}</x-slot>
                 @endif
-            </x-datatable.table>
+            </x-table>
         </div>
     </div>
 </x-app-layout>

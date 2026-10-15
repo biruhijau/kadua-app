@@ -6,21 +6,21 @@
 
     <div class="mt-3 space-y-3 px-3 sm:px-4">
         <div class="border-b border-black/10 pb-4 dark:border-white/10">
-            <x-theme-toggle full-width />
+            <x-theme.toggle full-width />
         </div>
 
         <div class="space-y-1 pt-1">
-            <x-responsive-nav-link :href="route('profile.edit')">
+            <x-navigation.mobile-link :href="route('profile.edit')">
                 {{ __('Profile') }}
-            </x-responsive-nav-link>
+            </x-navigation.mobile-link>
 
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
 
-                <x-responsive-nav-link :href="route('logout')" danger
+                <x-navigation.mobile-link :href="route('logout')" danger
                     onclick="event.preventDefault(); this.closest('form').submit();">
                     {{ __('Log Out') }}
-                </x-responsive-nav-link>
+                </x-navigation.mobile-link>
             </form>
         </div>
     </div>

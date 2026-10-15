@@ -26,6 +26,6 @@ class ProfileSessionDevice extends Component
      */
     public function render(): View
     {
-        return view('components.profile-session-device');
+        return view('components.profile.session-device');
     }
 }

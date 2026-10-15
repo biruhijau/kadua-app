@@ -4,7 +4,7 @@
     'placeholder' => null,
 ])
 
-<x-text-input
+<x-form.input
     :name="$name"
     :value="$value"
     :placeholder="$placeholder ?? __('Cari...')"

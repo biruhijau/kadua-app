@@ -9,10 +9,10 @@
         </p>
     </header>
 
-    <x-danger-button x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
-        class="w-full sm:w-auto">{{ __('Delete Account') }}</x-danger-button>
+    <x-form.button-danger x-data="" x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
+        class="w-full sm:w-auto">{{ __('Delete Account') }}</x-form.button-danger>
 
-    <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
+    <x-ui.modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
         <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
             @csrf
             @method('delete')
@@ -26,23 +26,23 @@
             </p>
 
             <div class="mt-6">
-                <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
+                <x-form.label for="password" value="{{ __('Password') }}" class="sr-only" />
 
-                <x-text-input id="password" name="password" type="password" class="mt-1 block w-full"
+                <x-form.input id="password" name="password" type="password" class="mt-1 block w-full"
                     placeholder="{{ __('Password') }}" />
 
-                <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
+                <x-form.error :messages="$errors->userDeletion->get('password')" class="mt-2" />
             </div>
 
             <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-                <x-secondary-button x-on:click="$dispatch('close')">
+                <x-form.button-secondary x-on:click="$dispatch('close')">
                     {{ __('Cancel') }}
-                </x-secondary-button>
+                </x-form.button-secondary>
 
-                <x-danger-button>
+                <x-form.button-danger>
                     {{ __('Delete Account') }}
-                </x-danger-button>
+                </x-form.button-danger>
             </div>
         </form>
-    </x-modal>
+    </x-ui.modal>
 </section>

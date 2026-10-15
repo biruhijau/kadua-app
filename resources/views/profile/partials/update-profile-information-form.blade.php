@@ -18,16 +18,16 @@
         @method('patch')
 
         <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)"
+            <x-form.label for="name" :value="__('Name')" />
+            <x-form.input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)"
                 required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+            <x-form.error class="mt-2" :messages="$errors->get('name')" />
         </div>
 
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
+            <x-form.label for="email" :value="__('Email')" />
+            <x-form.input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
+            <x-form.error class="mt-2" :messages="$errors->get('email')" />
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !$user->hasVerifiedEmail())
                 <div>
@@ -50,7 +50,7 @@
         </div>
 
         <div class="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-end">
-            <x-primary-button class="w-full sm:w-auto">{{ __('Save') }}</x-primary-button>
+            <x-form.button-primary class="w-full sm:w-auto">{{ __('Save') }}</x-form.button-primary>
         </div>
     </form>
 </section>

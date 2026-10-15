@@ -19,9 +19,9 @@
                 </div>
             </div>
         @else
-            <x-responsive-nav-link :href="$item['href']" :active="$item['active']">
+            <x-navigation.mobile-link :href="$item['href']" :active="$item['active']">
                 {{ $item['label'] }}
-            </x-responsive-nav-link>
+            </x-navigation.mobile-link>
         @endif
     @endforeach
 </div>

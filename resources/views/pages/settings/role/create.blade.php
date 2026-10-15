@@ -2,7 +2,7 @@
 
 <x-app-layout>
     <x-slot name="header">
-        <x-header.page :title="__('Tambah Peran')" :breadcrumbs="[
+        <x-page.header :title="__('Tambah Peran')" :breadcrumbs="[
         ['label' => __('Pengaturan'), 'href' => '#', 'icon' => 'settings'],
         ['label' => __('Peran'), 'href' => route('settings.role.index')],
         ['label' => __('Tambah')],
@@ -32,10 +32,10 @@
                 @include('pages.settings.role.form', ['role' => null])
 
                 <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-                    <x-secondary-button type="button" x-on:click.prevent="cancelForm()">
+                    <x-form.button-secondary type="button" x-on:click.prevent="cancelForm()">
                         {{ __('Batal') }}
-                    </x-secondary-button>
-                    <x-primary-button>{{ __('Simpan') }}</x-primary-button>
+                    </x-form.button-secondary>
+                    <x-form.button-primary>{{ __('Simpan') }}</x-form.button-primary>
                 </div>
             </form>
         </div>

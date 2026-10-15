@@ -13,7 +13,7 @@
     })->all();
 @endphp
 
-<x-dropdown align="left" match-trigger contentClasses="p-2 bg-white dark:bg-neutral-900" {{ $attributes->merge(['class' => 'w-full sm:w-auto']) }}>
+<x-ui.dropdown align="left" match-trigger contentClasses="p-2 bg-white dark:bg-neutral-900" {{ $attributes->merge(['class' => 'w-full sm:w-auto']) }}>
     <x-slot name="trigger">
         <button type="button"
             class="flex w-full items-center justify-between gap-2 rounded-lg border border-black/5 bg-[#F3F4F6] px-4 py-3 text-sm text-black transition hover:border-[#C89B3C] focus:outline-none focus:ring-2 focus:ring-[#C89B3C]/30 dark:border-white/10 dark:bg-[#1F1F1F] dark:text-white">
@@ -37,4 +37,4 @@
             </button>
         @endforeach
     </x-slot>
-</x-dropdown>
+</x-ui.dropdown>

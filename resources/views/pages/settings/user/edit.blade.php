@@ -2,7 +2,7 @@
 
 <x-app-layout>
     <x-slot name="header">
-        <x-header.page :title="__('Edit Pengguna')" :breadcrumbs="[
+        <x-page.header :title="__('Edit Pengguna')" :breadcrumbs="[
         ['label' => __('Pengaturan'), 'href' => '#', 'icon' => 'settings'],
         ['label' => __('Pengguna'), 'href' => route('settings.users.index')],
         ['label' => __('Edit')],
@@ -33,10 +33,10 @@
                 @include('pages.settings.user.form')
 
                 <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-                    <x-secondary-button type="button" x-on:click.prevent="cancelForm()">
+                    <x-form.button-secondary type="button" x-on:click.prevent="cancelForm()">
                         {{ __('Batal') }}
-                    </x-secondary-button>
-                    <x-primary-button>{{ __('Simpan perubahan') }}</x-primary-button>
+                    </x-form.button-secondary>
+                    <x-form.button-primary>{{ __('Simpan perubahan') }}</x-form.button-primary>
                 </div>
             </form>
         </div>

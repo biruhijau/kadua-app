@@ -10,19 +10,19 @@
         </p>
     </div>
 
-    <x-auth-session-status class="mb-5" :status="session('status')" />
+    <x-feedback.session-status class="mb-5" :status="session('status')" />
 
     <form method="POST" action="{{ route('login') }}" class="space-y-4">
         @csrf
 
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" type="email" name="email" :value="old('email')" placeholder="{{ __('Enter your email') }}" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-1.5" />
+            <x-form.label for="email" :value="__('Email')" />
+            <x-form.input id="email" type="email" name="email" :value="old('email')" placeholder="{{ __('Enter your email') }}" required autofocus autocomplete="username" />
+            <x-form.error :messages="$errors->get('email')" class="mt-1.5" />
         </div>
 
         <div x-data="{ show: false }">
-            <x-input-label for="password" :value="__('Password')" />
+            <x-form.label for="password" :value="__('Password')" />
 
             <div class="relative">
                 <input
@@ -46,7 +46,7 @@
                 </button>
             </div>
 
-            <x-input-error :messages="$errors->get('password')" class="mt-1.5" />
+            <x-form.error :messages="$errors->get('password')" class="mt-1.5" />
         </div>
 
         <div class="flex items-center justify-between pt-1">
@@ -63,9 +63,9 @@
         </div>
 
         <div class="pt-2">
-            <x-primary-button>
+            <x-form.button-primary>
                 {{ __('Sign In') }}
-            </x-primary-button>
+            </x-form.button-primary>
         </div>
     </form>
 

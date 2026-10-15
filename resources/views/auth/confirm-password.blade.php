@@ -14,7 +14,7 @@
         @csrf
 
         <div x-data="{ show: false }">
-            <x-input-label for="password" :value="__('Password')" />
+            <x-form.label for="password" :value="__('Password')" />
             <div class="relative">
                 <input
                     id="password"
@@ -35,13 +35,13 @@
                     <x-lucide-eye-off x-show="show" x-cloak class="h-5 w-5" />
                 </button>
             </div>
-            <x-input-error :messages="$errors->get('password')" class="mt-1.5" />
+            <x-form.error :messages="$errors->get('password')" class="mt-1.5" />
         </div>
 
         <div class="pt-2">
-            <x-primary-button>
+            <x-form.button-primary>
                 {{ __('Confirm') }}
-            </x-primary-button>
+            </x-form.button-primary>
         </div>
     </form>
 </x-guest-layout>

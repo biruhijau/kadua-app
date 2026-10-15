@@ -52,7 +52,7 @@
         </main>
     </div>
 
-    <x-alert.sweetalert :status="session('status')" />
+    <x-feedback.alert :status="session('status')" />
 </body>
 
 </html>

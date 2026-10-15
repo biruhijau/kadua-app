@@ -2,7 +2,7 @@
 
 <x-app-layout>
     <x-slot name="header">
-        <x-header.page :title="__('Peran')" :breadcrumbs="[
+        <x-page.header :title="__('Peran')" :breadcrumbs="[
         ['label' => __('Pengaturan'), 'href' => '#', 'icon' => 'settings'],
         ['label' => __('Peran')],
     ]" />
@@ -12,21 +12,21 @@
         <div class="mx-auto max-w-7xl">
             @can('roles.create')
                 <div class="mb-4 flex justify-end">
-                    <x-primary-button class="w-full sm:w-auto"
+                    <x-form.button-primary class="w-full sm:w-auto"
                         onclick="window.location='{{ route('settings.role.create') }}'">
                         <x-lucide-plus class="mr-2 h-4 w-4" />{{ __('Tambah') }}
-                    </x-primary-button>
+                    </x-form.button-primary>
                 </div>
             @endcan
 
-            <x-datatable.table :has-data="$roles->isNotEmpty()">
+            <x-table :has-data="$roles->isNotEmpty()">
                 <x-slot name="toolbar">
-                    <x-datatable.toolbar :action="route('settings.role.index')">
-                        <x-datatable.search :value="$search" :placeholder="__('Cari peran...')" />
+                    <x-table.toolbar :action="route('settings.role.index')">
+                        <x-table.search :value="$search" :placeholder="__('Cari peran...')" />
                         @if ($search !== '')
-                            <x-datatable.reset :href="route('settings.role.index')" />
+                            <x-table.reset :href="route('settings.role.index')" />
                         @endif
-                    </x-datatable.toolbar>
+                    </x-table.toolbar>
                 </x-slot>
 
                 <x-slot name="head">
@@ -43,23 +43,23 @@
                         <tr class="text-black/75 dark:text-white/75">
                             <td class="whitespace-nowrap px-6 py-4 font-medium text-black dark:text-white">{{ $role->name }}
                             </td>
-                            <td class="whitespace-nowrap px-6 py-4"><x-badge circle>{{ $role->permissions_count }}</x-badge>
+                            <td class="whitespace-nowrap px-6 py-4"><x-ui.badge circle>{{ $role->permissions_count }}</x-ui.badge>
                             </td>
-                            <td class="whitespace-nowrap px-6 py-4"><x-badge circle>{{ $role->users_count }}</x-badge></td>
+                            <td class="whitespace-nowrap px-6 py-4"><x-ui.badge circle>{{ $role->users_count }}</x-ui.badge></td>
                             <td class="px-6 py-4">
-                                <x-datatable.actions.menu>
+                                <x-table.actions.menu>
                                     @can('roles.update')
-                                        <x-datatable.actions.item :href="route('settings.role.edit', $role)" icon="pencil">
+                                        <x-table.actions.item :href="route('settings.role.edit', $role)" icon="pencil">
                                             {{ __('Edit') }}
-                                        </x-datatable.actions.item>
+                                        </x-table.actions.item>
                                     @endcan
                                     @can('roles.delete')
-                                        <x-datatable.actions.item :action="route('settings.role.destroy', $role)"
+                                        <x-table.actions.item :action="route('settings.role.destroy', $role)"
                                             method="delete" icon="trash-2" danger :confirm="__('Hapus peran ini?')">
                                             {{ __('Hapus') }}
-                                        </x-datatable.actions.item>
+                                        </x-table.actions.item>
                                     @endcan
-                                </x-datatable.actions.menu>
+                                </x-table.actions.menu>
                             </td>
                         </tr>
                     @endforeach
@@ -70,7 +70,7 @@
                 @if ($roles->hasPages())
                     <x-slot name="pagination">{{ $roles->links() }}</x-slot>
                 @endif
-            </x-datatable.table>
+            </x-table>
         </div>
     </div>
 </x-app-layout>

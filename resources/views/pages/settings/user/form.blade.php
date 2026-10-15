@@ -1,18 +1,18 @@
-<div><x-input-label for="name" :value="__('Nama')" /><x-text-input id="name" name="name" :value="old('name', $user?->name)" required autofocus class="mt-1 block w-full" /><x-input-error :messages="$errors->get('name')"
+<div><x-form.label for="name" :value="__('Nama')" /><x-form.input id="name" name="name" :value="old('name', $user?->name)" required autofocus class="mt-1 block w-full" /><x-form.error :messages="$errors->get('name')"
         class="mt-2" /></div>
-<div><x-input-label for="email" :value="__('Email')" /><x-text-input id="email" name="email" type="email"
-        :value="old('email', $user?->email)" required class="mt-1 block w-full" /><x-input-error
+<div><x-form.label for="email" :value="__('Email')" /><x-form.input id="email" name="email" type="email"
+        :value="old('email', $user?->email)" required class="mt-1 block w-full" /><x-form.error
         :messages="$errors->get('email')" class="mt-2" /></div>
-<div><x-input-label for="password" :value="__('Password')" /><x-text-input id="password" name="password" type="password"
-        :required="!$user" class="mt-1 block w-full" autocomplete="new-password" /><x-input-error
+<div><x-form.label for="password" :value="__('Password')" /><x-form.input id="password" name="password" type="password"
+        :required="!$user" class="mt-1 block w-full" autocomplete="new-password" /><x-form.error
         :messages="$errors->get('password')" class="mt-2" /></div>
-<div><x-input-label for="password_confirmation" :value="__('Konfirmasi password')" /><x-text-input
+<div><x-form.label for="password_confirmation" :value="__('Konfirmasi password')" /><x-form.input
         id="password_confirmation" name="password_confirmation" type="password" :required="!$user"
         class="mt-1 block w-full" autocomplete="new-password" /></div>
-<div><x-input-label :value="__('Peran')" />
+<div><x-form.label :value="__('Peran')" />
     <div class="mt-3 grid gap-3 sm:grid-cols-2">@foreach ($roles as $role)<label
         class="flex items-center gap-3 text-sm text-black/70 dark:text-white/70"><input type="checkbox"
             name="roles[]" value="{{ $role->id }}" @checked(in_array($role->id, old('roles', $user?->roles->pluck('id')->all() ?? []), true))
     class="rounded border-black/20 text-[#C89B3C] focus:ring-[#C89B3C] dark:border-white/20 dark:bg-neutral-900" />{{ $role->name }}</label>@endforeach
-    </div><x-input-error :messages="$errors->get('roles')" class="mt-2" />
+    </div><x-form.error :messages="$errors->get('roles')" class="mt-2" />
 </div>

@@ -11,7 +11,7 @@ class Navigation extends Component
 {
     public function render(): View
     {
-        return view('components.navigation', [
+        return view('components.navigation.navbar', [
             'Navigation' => $this->Visible($this->Navigation(), Auth::user()),
         ]);
     }

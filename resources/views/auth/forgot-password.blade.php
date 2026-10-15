@@ -10,21 +10,21 @@
         </p>
     </div>
 
-    <x-auth-session-status class="mb-5" :status="session('status')" />
+    <x-feedback.session-status class="mb-5" :status="session('status')" />
 
     <form method="POST" action="{{ route('password.email') }}" class="space-y-4">
         @csrf
 
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" type="email" name="email" :value="old('email')" placeholder="{{ __('Enter your email') }}" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-1.5" />
+            <x-form.label for="email" :value="__('Email')" />
+            <x-form.input id="email" type="email" name="email" :value="old('email')" placeholder="{{ __('Enter your email') }}" required autofocus />
+            <x-form.error :messages="$errors->get('email')" class="mt-1.5" />
         </div>
 
         <div class="pt-2">
-            <x-primary-button>
+            <x-form.button-primary>
                 {{ __('Email Password Reset Link') }}
-            </x-primary-button>
+            </x-form.button-primary>
         </div>
     </form>
 

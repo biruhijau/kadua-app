@@ -4,7 +4,7 @@
     <div>
         <h3 class="text-sm font-medium text-black dark:text-white">{{ __('Permission') }}</h3>
         <p class="mt-1 text-sm text-black/55 dark:text-white/55">{{ __('Pilih perizinan untuk peran ini.') }}</p>
-        <x-input-error :messages="$errors->get('permissions')" class="mt-2" />
+        <x-form.error :messages="$errors->get('permissions')" class="mt-2" />
     </div>
     <div class="grid gap-4 sm:grid-cols-2">
         @foreach ($groups as $group)

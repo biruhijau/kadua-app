@@ -61,7 +61,7 @@
                         </button>
                     </div>
 
-                    <x-modal name="revoke-session-{{ $session['id'] }}"
+                    <x-ui.modal name="revoke-session-{{ $session['id'] }}"
                         :show="$errors->getBag('sessionRevocation-' . $session['id'])->isNotEmpty()" focusable>
                         <form method="POST" action="{{ route('profile.sessions.destroy', $session['id']) }}" class="p-6">
                             @csrf
@@ -76,27 +76,27 @@
                             </p>
 
                             <div class="mt-6">
-                                <x-input-label for="session_password_{{ $session['id'] }}" :value="__('Kata sandi')"
+                                <x-form.label for="session_password_{{ $session['id'] }}" :value="__('Kata sandi')"
                                     class="sr-only" />
-                                <x-text-input id="session_password_{{ $session['id'] }}" name="password" type="password"
+                                <x-form.input id="session_password_{{ $session['id'] }}" name="password" type="password"
                                     class="block w-full" placeholder="{{ __('Kata sandi saat ini') }}"
                                     autocomplete="current-password" />
-                                <x-input-error :messages="$errors->getBag('sessionRevocation-' . $session['id'])->get('password')"
+                                <x-form.error :messages="$errors->getBag('sessionRevocation-' . $session['id'])->get('password')"
                                     class="mt-2" />
                             </div>
 
                             <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-                                <x-secondary-button
+                                <x-form.button-secondary
                                     x-on:click="$dispatch('close-modal', { name: 'revoke-session-{{ $session['id'] }}' })">
                                     {{ __('Batal') }}
-                                </x-secondary-button>
+                                </x-form.button-secondary>
 
-                                <x-danger-button>
+                                <x-form.button-danger>
                                     {{ __('Keluarkan') }}
-                                </x-danger-button>
+                                </x-form.button-danger>
                             </div>
                         </form>
-                    </x-modal>
+                    </x-ui.modal>
                 @endif
             </div>
         @empty
@@ -113,7 +113,7 @@
     </div>
 
     @if ($sessions['has_other_sessions'])
-        <x-modal name="revoke-all-sessions" :show="$errors->sessionRevocationAll->isNotEmpty()" focusable>
+        <x-ui.modal name="revoke-all-sessions" :show="$errors->sessionRevocationAll->isNotEmpty()" focusable>
             <form method="POST" action="{{ route('profile.sessions.destroy-others') }}" class="p-6">
                 @csrf
                 @method('delete')
@@ -127,22 +127,22 @@
                 </p>
 
                 <div class="mt-6">
-                    <x-input-label for="revoke_all_password" :value="__('Kata sandi')" class="sr-only" />
-                    <x-text-input id="revoke_all_password" name="password" type="password" class="block w-full"
+                    <x-form.label for="revoke_all_password" :value="__('Kata sandi')" class="sr-only" />
+                    <x-form.input id="revoke_all_password" name="password" type="password" class="block w-full"
                         placeholder="{{ __('Kata sandi saat ini') }}" autocomplete="current-password" />
-                    <x-input-error :messages="$errors->sessionRevocationAll->get('password')" class="mt-2" />
+                    <x-form.error :messages="$errors->sessionRevocationAll->get('password')" class="mt-2" />
                 </div>
 
                 <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-                    <x-secondary-button x-on:click="$dispatch('close-modal', { name: 'revoke-all-sessions' })">
+                    <x-form.button-secondary x-on:click="$dispatch('close-modal', { name: 'revoke-all-sessions' })">
                         {{ __('Batal') }}
-                    </x-secondary-button>
+                    </x-form.button-secondary>
 
-                    <x-danger-button>
+                    <x-form.button-danger>
                         {{ __('Keluarkan semua') }}
-                    </x-danger-button>
+                    </x-form.button-danger>
                 </div>
             </form>
-        </x-modal>
+        </x-ui.modal>
     @endif
 </section>

@@ -17,17 +17,17 @@
                     style="display: none;">
                     <div class="rounded-md bg-white p-2 ring-1 ring-black/5 dark:bg-neutral-900">
                         @foreach ($item['children'] as $child)
-                            <x-dropdown-link :href="$child['href']">
+                            <x-ui.dropdown-item :href="$child['href']">
                                 {{ $child['label'] }}
-                            </x-dropdown-link>
+                            </x-ui.dropdown-item>
                         @endforeach
                     </div>
                 </div>
             </div>
         @else
-            <x-nav-link :href="$item['href']" :active="$item['active']">
+            <x-navigation.desktop-link :href="$item['href']" :active="$item['active']">
                 {{ $item['label'] }}
-            </x-nav-link>
+            </x-navigation.desktop-link>
         @endif
     @endforeach
 </div>
