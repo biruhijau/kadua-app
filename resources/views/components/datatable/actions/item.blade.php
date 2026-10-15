@@ -28,7 +28,14 @@ $classes = $danger
         <span>{{ $slot }}</span>
     </a>
 @else
-    <form method="POST" action="{{ $action }}" @if ($confirm !== null) x-data x-on:submit.prevent="if (confirm('{{ $confirm }}')) $el.submit()" @endif>
+    <form
+        method="POST"
+        action="{{ $action }}"
+        @if ($confirm !== null)
+            x-data
+            x-on:submit.prevent="if (await window.confirmAction({ text: @js($confirm), icon: 'warning', danger: {{ $danger ? 'true' : 'false' }} })) { HTMLFormElement.prototype.submit.call($el); }"
+        @endif
+    >
         @csrf
         @if (strtoupper($method) !== 'POST')
             @method($method)

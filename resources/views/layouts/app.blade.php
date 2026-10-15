@@ -48,5 +48,7 @@
                 {{ $slot }}
             </main>
         </div>
+
+        <x-alert.sweetalert :status="session('status')" />
     </body>
 </html>

@@ -14,13 +14,38 @@
 
     <div class="px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
         <div class="mx-auto max-w-3xl rounded-2xl border border-black/5 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-neutral-950 sm:p-8">
-            <form method="POST" action="{{ route('settings.role.update', $role) }}" class="space-y-8">
+            <form
+                method="POST"
+                action="{{ route('settings.role.update', $role) }}"
+                class="space-y-8"
+                x-data="{
+                    dirty: false,
+                    async cancelForm() {
+                        const leave = ! this.dirty || await window.confirmAction({
+                            icon: 'warning',
+                            title: @js(__('Batalkan perubahan?')),
+                            text: @js(__('Perubahan yang belum disimpan akan hilang.')),
+                            confirmText: @js(__('Ya, batalkan')),
+                            danger: true,
+                        });
+
+                        if (leave) {
+                            window.location = @js(route('settings.role.index'));
+                        }
+                    },
+                }"
+                x-on:input="dirty = true"
+                x-on:change="dirty = true"
+                x-on:submit="dirty = false"
+            >
                 @csrf
                 @method('patch')
                 @include('pages.settings.role.form')
 
                 <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-                    <x-secondary-button type="button" onclick="window.location='{{ route('settings.role.index') }}'">{{ __('Batal') }}</x-secondary-button>
+                    <x-secondary-button type="button" x-on:click.prevent="cancelForm()">
+                        {{ __('Batal') }}
+                    </x-secondary-button>
                     <x-primary-button>{{ __('Simpan perubahan') }}</x-primary-button>
                 </div>
             </form>

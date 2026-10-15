@@ -10,10 +10,6 @@
 
     <div class="px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
         <div class="mx-auto max-w-7xl">
-            @if (session('status'))
-                <x-alert.success>{{ __('Perubahan pengguna berhasil disimpan.') }}</x-alert.success>
-            @endif
-
             @can('users.create')
                 <div class="mb-4 flex justify-end">
                     <x-primary-button class="w-full sm:w-auto"

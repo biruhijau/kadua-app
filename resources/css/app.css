@@ -53,3 +53,16 @@ body {
         "Playfair Display", Georgia, Cambria, "Times New Roman", Times, serif;
     --color-brand-gold: #c89b3c;
 }
+
+.kadua-swal {
+    font-family: var(--font-sans);
+    border-radius: 1rem;
+}
+
+.kadua-swal .swal2-title {
+    font-family: var(--font-serif);
+}
+
+.kadua-swal .swal2-styled {
+    border-radius: 0.5rem;
+}

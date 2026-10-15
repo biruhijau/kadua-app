@@ -49,16 +49,6 @@
 
         <div class="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-end">
             <x-primary-button class="w-full sm:w-auto">{{ __('Save') }}</x-primary-button>
-
-            @if (session('status') === 'profile-updated')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-black/55 dark:text-white/55"
-                >{{ __('Saved.') }}</p>
-            @endif
         </div>
     </form>
 </section>

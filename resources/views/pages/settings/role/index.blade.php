@@ -13,10 +13,6 @@
 
     <div class="px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
         <div class="mx-auto max-w-7xl">
-            @if (session('status'))
-                <x-alert.success>{{ __('Perubahan peran berhasil disimpan.') }}</x-alert.success>
-            @endif
-
             @can('roles.create')
                 <div class="mb-4 flex justify-end">
                     <x-primary-button class="w-full sm:w-auto" onclick="window.location='{{ route('settings.role.create') }}'">
@@ -48,8 +44,8 @@
                     @foreach ($roles as $role)
                         <tr class="text-black/75 dark:text-white/75">
                             <td class="whitespace-nowrap px-6 py-4 font-medium text-black dark:text-white">{{ $role->name }}</td>
-                            <td class="whitespace-nowrap px-6 py-4"><x-badge>{{ $role->permissions_count }}</x-badge></td>
-                            <td class="whitespace-nowrap px-6 py-4"><x-badge>{{ $role->users_count }}</x-badge></td>
+                            <td class="whitespace-nowrap px-6 py-4"><x-badge circle>{{ $role->permissions_count }}</x-badge></td>
+                            <td class="whitespace-nowrap px-6 py-4"><x-badge circle>{{ $role->users_count }}</x-badge></td>
                             <td class="px-6 py-4">
                                 <x-datatable.actions.menu>
                                     @can('roles.update')
