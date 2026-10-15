@@ -463,6 +463,17 @@ Then redirect with the same key from the controller:
 return to_route('settings.models.index')->with('status', 'model-created');
 ```
 
+#### Mode A′ — Auth flash (already-localized message)
+
+Auth flows (login, forgot-password) receive a **translated message string** in
+`session('status')` (from Laravel's `passwords.*`), not a status key. Pass it
+directly as `text` with an explicit `type`; it renders only when the flash is
+present:
+
+```blade
+<x-feedback.alert type="success" :text="session('status')" />
+```
+
 #### Mode B — Explicit notification
 
 ```blade
@@ -571,8 +582,7 @@ components/
 │   ├── dropdown.blade.php        → x-ui.dropdown
 │   └── dropdown-item.blade.php   → x-ui.dropdown-item
 ├── feedback/
-│   ├── alert.blade.php           → x-feedback.alert
-│   └── session-status.blade.php  → x-feedback.session-status
+│   └── alert.blade.php           → x-feedback.alert
 ├── table.blade.php               → x-table
 ├── table/                        → x-table.toolbar / .search / .filter / .reset / .actions.*
 ├── page/
@@ -597,7 +607,6 @@ components/
 | `x-ui.dropdown` | Generic dropdown (trigger + panel). |
 | `x-ui.dropdown-item` | Dropdown link item; supports `danger`. |
 | `x-feedback.alert` | Non-visual SweetAlert2 trigger (see section 4). |
-| `x-feedback.session-status` | Plain auth status message. |
 | `x-table` (+ `x-table.*`) | Reusable datatable (see section 3). |
 | `x-page.header` | Page title + breadcrumb. |
 | `x-theme.toggle` | Light/Dark/Auto theme switcher. |

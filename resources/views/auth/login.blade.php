@@ -10,7 +10,7 @@
         </p>
     </div>
 
-    <x-feedback.session-status class="mb-5" :status="session('status')" />
+    <x-feedback.alert type="success" :text="session('status')" />
 
     <form method="POST" action="{{ route('login') }}" class="space-y-4">
         @csrf
@@ -56,7 +56,7 @@
             </label>
 
             @if (Route::has('password.request'))
-                <a class="text-xs text-black/55 transition-colors hover:text-[#C89B3C] focus:outline-none focus:ring-2 focus:ring-[#C89B3C] sm:text-sm dark:text-white/55" href="{{ route('password.request') }}">
+                <a class="text-xs text-black/55 transition-colors hover:text-[#C89B3C] focus:outline-none sm:text-sm dark:text-white/55" href="{{ route('password.request') }}">
                     {{ __('Forgot Password?') }}
                 </a>
             @endif

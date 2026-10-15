@@ -10,7 +10,7 @@
         </p>
     </div>
 
-    <x-feedback.session-status class="mb-5" :status="session('status')" />
+    <x-feedback.alert type="success" :text="session('status')" />
 
     <form method="POST" action="{{ route('password.email') }}" class="space-y-4">
         @csrf
