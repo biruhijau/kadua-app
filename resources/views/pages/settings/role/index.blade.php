@@ -32,7 +32,7 @@
                 <x-slot name="head">
                     <tr>
                         <th class="whitespace-nowrap px-6 py-4">{{ __('Nama') }}</th>
-                        <th class="whitespace-nowrap px-6 py-4">{{ __('Permission') }}</th>
+                        <th class="whitespace-nowrap px-6 py-4">{{ __('Izin Akses') }}</th>
                         <th class="whitespace-nowrap px-6 py-4">{{ __('Pengguna') }}</th>
                         <th class="w-16 px-6 py-4"><span class="sr-only">{{ __('Aksi') }}</span></th>
                     </tr>

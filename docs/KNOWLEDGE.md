@@ -575,7 +575,8 @@ components/
 │   ├── button-primary.blade.php  → x-form.button-primary
 │   ├── button-secondary.blade.php→ x-form.button-secondary
 │   ├── button-danger.blade.php   → x-form.button-danger
-│   └── permission-fields.blade.php → x-form.permission-fields
+│   ├── permission-fields.blade.php → x-form.permission-fields
+│   └── multiselect.blade.php     → x-form.multiselect
 ├── ui/
 │   ├── badge.blade.php           → x-ui.badge
 │   ├── modal.blade.php           → x-ui.modal
@@ -601,7 +602,8 @@ components/
 | `x-form.button-primary` | Primary submit button. |
 | `x-form.button-secondary` | Secondary outline button (`type="button"` by default). |
 | `x-form.button-danger` | Destructive action button. |
-| `x-form.permission-fields` | Permission checkboxes grouped by feature (Role form). |
+| `x-form.permission-fields` | Permission cards grouped by feature (Role form); each card is a radio-style toggle that turns primary when checked. |
+| `x-form.multiselect` | Multi-select dropdown (filter style) writing `name[]` checkboxes; trigger shows first label + `+N Lainnya`. |
 | `x-ui.badge` | Small pill; `variant` (`primary` default) + `circle`. |
 | `x-ui.modal` | Alpine modal with focus trap and `open-modal`/`close-modal` events. |
 | `x-ui.dropdown` | Generic dropdown (trigger + panel). |
@@ -614,3 +616,22 @@ components/
 | `x-navigation.desktop-link` | Desktop nav link with `active` state. |
 | `x-navigation.mobile-link` | Mobile nav link; supports `active` + `danger`. |
 | `x-profile-session-device` | Device icon (mobile/tablet/desktop) from user agent. |
+
+### 5.1 Multi-Select (`x-form.multiselect`)
+
+Use it when a form needs to pick several values from a list (e.g. a user's
+roles). It renders the filter-style trigger plus a panel of real `name[]`
+checkboxes, so the value posts as an array without any hidden input.
+
+```blade
+<x-form.multiselect
+    name="roles"
+    :selected="old('roles', $user?->roles->pluck('id')->all() ?? [])"
+    :options="$roles->pluck('name', 'id')->all()"
+    :placeholder="__('Pilih peran')"
+/>
+```
+
+Props: `name` (posts as `name[]`), `options` (`value => label`), `selected`
+(array of values), `placeholder`. The trigger shows the first selected label
+plus `+N Lainnya` when more than one is chosen.

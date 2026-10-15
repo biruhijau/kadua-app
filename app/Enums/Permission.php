@@ -17,7 +17,7 @@ enum Permission: string
     public function feature(): string
     {
         return match ($this) {
-            self::DashboardView => 'Dashboard',
+            self::DashboardView => 'Beranda',
             self::UsersView, self::UsersCreate, self::UsersUpdate, self::UsersDelete => 'Pengguna',
             self::RolesView, self::RolesCreate, self::RolesUpdate, self::RolesDelete => 'Peran',
         };
