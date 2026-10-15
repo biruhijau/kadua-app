@@ -1,12 +1,55 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 @plugin "@tailwindcss/forms";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
+html,
+body {
+    max-width: 100%;
+    overflow-x: clip;
+}
+
+.theme-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+}
+
+.dark .theme-scrollbar {
+    scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+.theme-scrollbar::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+}
+
+.theme-scrollbar::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.theme-scrollbar::-webkit-scrollbar-thumb {
+    border-radius: 9999px;
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+.theme-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.dark .theme-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.dark .theme-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
 @theme {
-    --font-sans: 'Montserrat', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
-    --font-serif: 'Playfair Display', Georgia, Cambria, 'Times New Roman', Times, serif;
-    --color-brand-gold: #C89B3C;
+    --font-sans:
+        "Montserrat", "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-serif:
+        "Playfair Display", Georgia, Cambria, "Times New Roman", Times, serif;
+    --color-brand-gold: #c89b3c;
 }

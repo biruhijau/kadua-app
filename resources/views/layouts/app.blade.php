@@ -31,7 +31,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased bg-white text-black selection:bg-[#C89B3C] selection:text-white dark:bg-black dark:text-white">
-        <div class="min-h-screen bg-[#F8F7F4] dark:bg-[#0A0A0A]">
+        <div class="min-h-screen w-full max-w-[100vw] bg-[#F8F7F4] dark:bg-[#0A0A0A]">
             <x-navigation />
 
             <!-- Page Heading -->

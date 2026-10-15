@@ -2,9 +2,13 @@
 
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-xl font-semibold leading-tight text-black dark:text-white">
-            {{ __('Profile') }}
-        </h2>
+        <x-header.page
+            :title="__('Profile')"
+            :breadcrumbs="[
+                ['label' => __('Dashboard'), 'href' => route('dashboard')],
+                ['label' => __('Profile')],
+            ]"
+        />
     </x-slot>
 
     <div class="px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
