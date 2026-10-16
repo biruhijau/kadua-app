@@ -2,15 +2,15 @@
 
 namespace Database\Factories;
 
-use App\Models\ProductCategory;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory<ProductCategory>
+ * @extends Factory<Category>
  */
-class ProductCategoryFactory extends Factory
+class CategoryFactory extends Factory
 {
-    protected $model = ProductCategory::class;
+    protected $model = Category::class;
 
     /** @return array<string, mixed> */
     public function definition(): array

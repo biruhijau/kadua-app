@@ -34,10 +34,10 @@ class Navigation extends Component
                 'permission' => null,
                 'children' => [
                     [
-                        'label' => __('Kategori Produk'),
-                        'href' => route('master.product-categories.index'),
-                        'active' => request()->routeIs('master.product-categories.*'),
-                        'permission' => 'product-categories.view',
+                        'label' => __('Kategori'),
+                        'href' => route('master.categories.index'),
+                        'active' => request()->routeIs('master.categories.*'),
+                        'permission' => 'categories.view',
                         'children' => [],
                     ],
                 ],
