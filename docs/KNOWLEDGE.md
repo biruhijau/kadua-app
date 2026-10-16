@@ -11,7 +11,7 @@ Sections:
 3. Reusable Datatable
 4. SweetAlert2 Alerts
 5. Component Catalog
-6. Account Status (Activate & Block)
+6. Account Status (Block & Unblock)
 
 ---
 
@@ -245,6 +245,7 @@ components/
 | `has-data` | bool | `true` | When `false`, renders the `empty` slot instead of the table. |
 | `selectable` | bool | `false` | Adds shared Alpine state for row selection (see 3.5). |
 | `ids` | array | `[]` | Row ids, used by select-all. Only needed when `selectable`. |
+| `blockedIds` | array | `[]` | Ids of rows that are blocked, used by `allBlocked()` to toggle the bulk button label/action. |
 
 Slots: `toolbar`, `bulk`, `head`, `body`, `empty`, `pagination`.
 
@@ -351,17 +352,25 @@ Alpine scope (`selected`, `ids`, `toggleAll()`, `allSelected()`, `submitBulk()`)
 > what `x-table.bulk` renders, and why the bar accepts several actions.
 
 ```blade
-<x-table :has-data="$users->isNotEmpty()" :selectable="true" :ids="$users->pluck('id')->all()">
+<x-table :has-data="$users->isNotEmpty()" :selectable="true" :ids="$users->pluck('id')->all()"
+    :blocked-ids="$users->getCollection()->filter(fn ($user) => $user->isBlocked())->pluck('id')->all()">
     <x-slot name="bulk">
         <x-table.bulk>
-            <button type="button"
-                data-action="{{ route('settings.users.bulk-activate') }}" data-method="POST"
-                x-on:click="submitBulk($el)">Buka Blokir</button>
+            @can('users.update')
+                <x-table.bulk-button
+                    :block-route="route('settings.users.bulk-block')"
+                    :unblock-route="route('settings.users.bulk-unblock')"
+                    :confirm-block="__('Blokir pengguna terpilih?')"
+                    :confirm-unblock="__('Buka blokir pengguna terpilih?')" />
+            @endcan
 
-            <button type="button"
-                data-action="{{ route('settings.users.bulk-destroy') }}" data-method="DELETE"
-                data-confirm="Hapus pengguna terpilih?" data-danger="true"
-                x-on:click="submitBulk($el)">Hapus</button>
+            @can('users.delete')
+                <button type="button" data-action="{{ route('settings.users.bulk-destroy') }}"
+                    data-method="DELETE" data-confirm="{{ __('Hapus pengguna terpilih?') }}"
+                    data-danger="true" x-on:click="submitBulk($el)">
+                    {{ __('Hapus') }}
+                </button>
+            @endcan
         </x-table.bulk>
     </x-slot>
 
@@ -386,14 +395,29 @@ Alpine scope (`selected`, `ids`, `toggleAll()`, `allSelected()`, `submitBulk()`)
 | `x-table.select-all` | — | Header checkbox; checked when every id is selected. |
 | `x-table.select` | `value`, `form` (`bulk-form`) | Row checkbox, posts as `ids[]`. |
 | `x-table.bulk` | `form` (`bulk-form`) | Bar (appears when `selected.length > 0`) + hidden form. |
+| `x-table.bulk-button` | `blockRoute`, `unblockRoute`, `confirmBlock`, `confirmUnblock` | Single conditional block/unblock button (see 3.5). |
+| `x-table.bulk-button` | `blockRoute`, `unblockRoute`, `confirmBlock`, `confirmUnblock` | Single conditional button: shows **Blokir** when not all selected are blocked, **Buka Blokir** when all are. Binds `data-action`/`data-confirm` via Alpine. |
 
 Buttons carry `data-action`, `data-method`, and optionally `data-confirm` /
 `data-danger="true"`. `submitBulk()` reads them, asks for confirmation via
 SweetAlert2 when `data-confirm` is present, sets the form action and `_method`,
 then submits natively.
 
-Give each bulk route its own permission middleware. Declare literal bulk paths
-**before** the `{model}` routes, otherwise route model binding captures them.
+Give each bulk route its own permission middleware.
+
+**Route ordering / UUID constraint:** a literal bulk path such as
+`DELETE /app/settings/users/bulk` is captured by `DELETE /app/settings/users/{user}`
+if the `{user}` route is registered first (route model binding treats `bulk` as an
+id → 404). Two ways to make the order irrelevant:
+
+1. Declare bulk routes **before** the `{user}` routes, **or**
+2. Constrain the parameter so it only accepts UUIDs:
+   ```php
+   ->where('user', '[0-9a-fA-F-]{36}')
+   ```
+   With the constraint, `bulk` never matches `{user}`, so all User Management
+   routes can live in one tidy block in any order. This is the recommended
+   approach — it also validates the parameter.
 
 ### 3.6 Controller Conventions
 
@@ -451,6 +475,12 @@ routes must be protected separately (see 1.4).
 
 Reference implementation: `resources/views/pages/settings/user/index.blade.php`
 and `resources/views/pages/settings/role/index.blade.php`.
+
+> The per-row `<tr>` markup is extracted into
+> `resources/views/pages/settings/user/_row.blade.php` and rendered with
+> `@include('pages.settings.user._row', ['user' => $user])`, keeping the index
+> page short. The partial reads `$user` and computes `users.update` / `users.delete`
+> permissions locally.
 
 ---
 
@@ -647,7 +677,7 @@ components/
 ├── feedback/
 │   └── alert.blade.php           → x-feedback.alert
 ├── table.blade.php               → x-table
-├── table/                        → x-table.toolbar / .search / .filter / .reset / .actions.*
+├── table/                        → x-table.toolbar / .search / .filter / .reset / .select-all / .select / .bulk / .bulk-button / .actions.*
 ├── page/
 │   └── header.blade.php          → x-page.header
 ├── theme/
@@ -700,7 +730,7 @@ plus `+N Lainnya` when more than one is chosen.
 
 ---
 
-## 6. Account Status (Activate & Block)
+## 6. Account Status (Block & Unblock)
 
 Two independent flags drive access on `users`:
 
@@ -761,7 +791,8 @@ Akibatnya, untuk pilihan campuran tombol tetap menampilkan **Blokir** (karena `a
 - Status column is **two-state**, driven by `blocked_at` only: red **`Diblokir`**
   badge when blocked, otherwise green **Aktif**. `email_verified_at` is never
   shown here, and there is no "Verifikasi" state.
-- Bulk bar offers Buka Blokir / Blokir / Hapus for the selected rows.
+- Bulk bar shows a **single conditional button** (`x-table.bulk-button`): **Blokir**
+  when not every selected row is blocked, **Buka Blokir** when all are. Plus **Hapus**.
 
 ### 6.4 Flash keys
 
