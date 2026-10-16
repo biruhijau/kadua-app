@@ -11,6 +11,7 @@ Sections:
 3. Reusable Datatable
 4. SweetAlert2 Alerts
 5. Component Catalog
+6. Account Status (Activate & Block)
 
 ---
 
@@ -185,6 +186,9 @@ components/
     ├── search.blade.php       → x-table.search     (search input)
     ├── filter.blade.php       → x-table.filter     (dropdown filter)
     ├── reset.blade.php        → x-table.reset      (X reset button)
+    ├── select-all.blade.php   → x-table.select-all (header "select all" checkbox)
+    ├── select.blade.php       → x-table.select     (row checkbox)
+    ├── bulk.blade.php         → x-table.bulk       (bulk action bar + form)
     └── actions/
         ├── menu.blade.php     → x-table.actions.menu   (⋮ dropdown container)
         └── item.blade.php     → x-table.actions.item   (single action row)
@@ -239,8 +243,10 @@ components/
 | Prop | Type | Default | Purpose |
 | --- | --- | --- | --- |
 | `has-data` | bool | `true` | When `false`, renders the `empty` slot instead of the table. |
+| `selectable` | bool | `false` | Adds shared Alpine state for row selection (see 3.5). |
+| `ids` | array | `[]` | Row ids, used by select-all. Only needed when `selectable`. |
 
-Slots: `toolbar`, `head`, `body`, `empty`, `pagination`.
+Slots: `toolbar`, `bulk`, `head`, `body`, `empty`, `pagination`.
 
 - Pass `:has-data="$models->isNotEmpty()"` so an empty result shows the `empty`
   slot instead of an empty table.
@@ -333,7 +339,63 @@ Examples:
 </x-table.actions.item>
 ```
 
-### 3.5 Controller Conventions
+### 3.5 Bulk Action (row selection)
+
+Bulk actions need a selection state shared by the header checkbox, every row
+checkbox and the action bar. Enable it on `x-table`; the root then exposes an
+Alpine scope (`selected`, `ids`, `toggleAll()`, `allSelected()`, `submitBulk()`).
+
+> Row action menus render their own `<form>` per row, so the table **cannot** be
+> wrapped in one big form (nested forms are invalid HTML). Instead each checkbox
+> posts to a separate form via the HTML5 `form="bulk-form"` attribute. That is
+> what `x-table.bulk` renders, and why the bar accepts several actions.
+
+```blade
+<x-table :has-data="$users->isNotEmpty()" :selectable="true" :ids="$users->pluck('id')->all()">
+    <x-slot name="bulk">
+        <x-table.bulk>
+            <button type="button"
+                data-action="{{ route('settings.users.bulk-activate') }}" data-method="POST"
+                x-on:click="submitBulk($el)">Buka Blokir</button>
+
+            <button type="button"
+                data-action="{{ route('settings.users.bulk-destroy') }}" data-method="DELETE"
+                data-confirm="Hapus pengguna terpilih?" data-danger="true"
+                x-on:click="submitBulk($el)">Hapus</button>
+        </x-table.bulk>
+    </x-slot>
+
+    <x-slot name="head">
+        <tr>
+            <th class="w-12 px-6 py-4"><x-table.select-all /></th>
+            ...
+        </tr>
+    </x-slot>
+
+    <x-slot name="body">
+        <tr>
+            <td class="px-6 py-4"><x-table.select :value="$user->id" /></td>
+            ...
+        </tr>
+    </x-slot>
+</x-table>
+```
+
+| Component | Props | Notes |
+| --- | --- | --- |
+| `x-table.select-all` | — | Header checkbox; checked when every id is selected. |
+| `x-table.select` | `value`, `form` (`bulk-form`) | Row checkbox, posts as `ids[]`. |
+| `x-table.bulk` | `form` (`bulk-form`) | Bar (appears when `selected.length > 0`) + hidden form. |
+
+Buttons carry `data-action`, `data-method`, and optionally `data-confirm` /
+`data-danger="true"`. `submitBulk()` reads them, asks for confirmation via
+SweetAlert2 when `data-confirm` is present, sets the form action and `_method`,
+then submits natively.
+
+Give each bulk route its own permission middleware. Declare literal bulk paths
+**before** the `{model}` routes, otherwise route model binding captures them.
+
+### 3.6 Controller Conventions
 
 Keep the query in the controller and pass `search`, the selected filters, and
 the paginator to the view. Use `withQueryString()` so filters survive paging.
@@ -358,7 +420,7 @@ public function index(Request $request): View
 }
 ```
 
-### 3.6 Permission-Aware Actions
+### 3.7 Permission-Aware Actions
 
 Guard each action and the create button with permissions. Hide = UX only;
 routes must be protected separately (see 1.4).
@@ -635,3 +697,82 @@ checkboxes, so the value posts as an array without any hidden input.
 Props: `name` (posts as `name[]`), `options` (`value => label`), `selected`
 (array of values), `placeholder`. The trigger shows the first selected label
 plus `+N Lainnya` when more than one is chosen.
+
+---
+
+## 6. Account Status (Activate & Block)
+
+Two independent flags drive access on `users`:
+
+| Column | Meaning |
+| --- | --- |
+| `email_verified_at` | Filled means the account can pass the `verified` middleware. |
+| `blocked_at` | Filled means the account is blocked — access is revoked entirely. |
+
+`User::isBlocked()` reports the blocked state. The User factory exposes an
+`unverified()` and a `blocked()` state.
+
+### 6.1 Actions and routes
+
+Both a **single** row action and a **bulk** action exist.
+
+| Action | Single route | Bulk route | Permission |
+| --- | --- | --- | --- |
+| Block | `settings.users.block` | `settings.users.bulk-block` | `users.update` |
+| Unblock | `settings.users.unblock` | `settings.users.bulk-unblock` | `users.update` |
+| Delete | `settings.users.destroy` | `settings.users.bulk-destroy` | `users.delete` |
+
+Actions live in `app/Actions/Settings/` (`BlockUserAction`, `UnblockUserAction`).
+Both are deliberately narrow — they touch **`blocked_at` only**:
+
+- **Block** sets `blocked_at = now()`.
+- **Unblock** sets `blocked_at = null`.
+
+Neither action touches `email_verified_at`. Verifying the email address is the
+**user's own responsibility**, so an administrator can never force verification.
+`CreateUserAction` sends the verification notification on creation
+(`sendEmailVerificationNotification()`) so a new user can activate the account
+from the emailed link. Bulk requests validate through `BulkUserRequest` (`ids`
+array of existing UUIDs) and **always exclude the authenticated user**, so an
+administrator can never delete or block themselves.
+
+**Idempotensi (penting untuk kondisi campuran):** bulk block/unblock hanya menyentuh baris yang belum dalam kondisi target, sehingga memilih campuran (sebagian diblokir + sebagian tidak) aman:
+
+- `bulkBlock` memakai `whereNull('blocked_at')` → hanya memblokir yang belum diblokir; yang sudah diblokir **tidak berubah** (timestamp tidak di-refresh).
+- `bulkUnblock` memakai `whereNotNull('blocked_at')` → hanya membuka blokir yang diblokir.
+
+Akibatnya, untuk pilihan campuran tombol tetap menampilkan **Blokir** (karena `allBlocked()` false) dan hanya memblokir subset yang belum diblokir.
+
+### 6.2 Access enforcement
+
+- `App\Http\Middleware\EnsureUserIsNotBlocked` is appended to the `auth`
+  middleware group. A blocked account that already has a session is logged out,
+  its session invalidated, and redirected to `login`.
+- `AuthenticatedSessionController::store` checks `isBlocked()` after
+  `authenticate()`, so a blocked user cannot sign in.
+- Both redirect with `status` + `status_type = 'error'`; the login view renders
+  `<x-feedback.alert :type="session('status_type', 'success')" ... />` so the
+  message appears as a SweetAlert2 error dialog.
+
+### 6.3 UI
+
+- Row menu: **Blokir** (danger, when `! isBlocked()`), **Buka Blokir** (when
+  `isBlocked()`), plus **Edit** and **Hapus**.
+- Status column is **two-state**, driven by `blocked_at` only: red **`Diblokir`**
+  badge when blocked, otherwise green **Aktif**. `email_verified_at` is never
+  shown here, and there is no "Verifikasi" state.
+- Bulk bar offers Buka Blokir / Blokir / Hapus for the selected rows.
+
+### 6.4 Flash keys
+
+Registered in the `$statusMap` of `x-feedback.alert`: `user-blocked`,
+`user-unblocked`, `users-deleted-bulk`, `users-blocked-bulk`,
+`users-unblocked-bulk`.
+
+### 6.5 Logout redirect
+
+`AuthenticatedSessionController::destroy()` redirects to `route('login')`
+(not `/`). Redirecting to `/` chains to `/app`, where the `verified` middleware
+sends an unverified user to `verification.notice` and
+`EmailVerificationPromptController` calls `hasVerifiedEmail()` on a null user →
+500. The controller is also guarded against a null user.

@@ -1,12 +1,69 @@
 @props([
     'hasData' => true,
+    'selectable' => false,
+    'ids' => [],
+    'blockedIds' => [],
 ])
 
-<div {{ $attributes->merge(['class' => 'w-full max-w-full overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm dark:border-white/10 dark:bg-neutral-950']) }}>
+@php
+    $ids = array_values((array) $ids);
+    $blockedIds = array_values((array) $blockedIds);
+@endphp
+
+<div
+    @if ($selectable)
+        x-data="{
+            selected: [],
+            ids: @js($ids),
+            blockedIds: @js($blockedIds),
+            bulkAction: '',
+            bulkMethod: 'POST',
+            toggleAll(checked) {
+                this.selected = checked ? [...this.ids] : [];
+            },
+            allSelected() {
+                return this.ids.length > 0 && this.selected.length === this.ids.length;
+            },
+            allBlocked() {
+                return this.selected.length > 0
+                    && this.selected.every((id) => this.blockedIds.includes(id));
+            },
+            async submitBulk(button) {
+                const action = button.dataset.action;
+                const method = button.dataset.method || 'POST';
+                const confirm = button.dataset.confirm;
+
+                if (confirm) {
+                    const proceed = await window.confirmAction({
+                        text: confirm,
+                        icon: 'warning',
+                        danger: button.dataset.danger === 'true',
+                    });
+
+                    if (! proceed) {
+                        return;
+                    }
+                }
+
+                this.bulkAction = action;
+                this.bulkMethod = method;
+
+                await this.$nextTick();
+
+                this.$refs.bulkForm.submit();
+            },
+        }"
+    @endif
+    {{ $attributes->merge(['class' => 'w-full max-w-full overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm dark:border-white/10 dark:bg-neutral-950']) }}
+>
     @isset($toolbar)
         <div class="border-b border-black/5 p-4 dark:border-white/10 sm:p-6">
             {{ $toolbar }}
         </div>
+    @endisset
+
+    @isset($bulk)
+        {{ $bulk }}
     @endisset
 
     @if ($hasData)

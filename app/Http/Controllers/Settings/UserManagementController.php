@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers\Settings;
 
+use App\Actions\Settings\BlockUserAction;
 use App\Actions\Settings\CreateUserAction;
 use App\Actions\Settings\DeleteUserAction;
+use App\Actions\Settings\UnblockUserAction;
 use App\Actions\Settings\UpdateUserAction;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Settings\BulkUserRequest;
 use App\Http\Requests\Settings\StoreUserRequest;
 use App\Http\Requests\Settings\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class UserManagementController extends Controller
@@ -23,7 +27,7 @@ class UserManagementController extends Controller
 
         return view('pages.settings.user.index', [
             'users' => User::query()
-                ->select(['id', 'name', 'email', 'email_verified_at', 'created_at'])
+                ->select(['id', 'name', 'email', 'email_verified_at', 'blocked_at', 'created_at'])
                 ->with('roles:id,name')
                 ->when($search !== '', fn ($query) => $query->where(fn ($query) => $query->where('name', 'like', "%{$search}%")->orWhere('email', 'like', "%{$search}%")))
                 ->when($role !== '', fn ($query) => $query->role($role))
@@ -80,5 +84,55 @@ class UserManagementController extends Controller
         $delete->handle($user);
 
         return to_route('settings.users.index')->with('status', 'user-deleted');
+    }
+
+    public function unblock(User $user, UnblockUserAction $unblock): RedirectResponse
+    {
+        $unblock->handle($user);
+
+        return to_route('settings.users.index')->with('status', 'user-unblocked');
+    }
+
+    public function block(User $user, BlockUserAction $block): RedirectResponse
+    {
+        if ($user->is(Auth::user())) {
+            return to_route('settings.users.index')->with('status', 'user-blocked');
+        }
+
+        $block->handle($user);
+
+        return to_route('settings.users.index')->with('status', 'user-blocked');
+    }
+
+    public function bulkDestroy(BulkUserRequest $request): RedirectResponse
+    {
+        User::query()
+            ->whereIn('id', $request->validated('ids'))
+            ->whereKeyNot(Auth::id())
+            ->delete();
+
+        return to_route('settings.users.index')->with('status', 'users-deleted-bulk');
+    }
+
+    public function bulkBlock(BulkUserRequest $request): RedirectResponse
+    {
+        User::query()
+            ->whereIn('id', $request->validated('ids'))
+            ->whereKeyNot(Auth::id())
+            ->whereNull('blocked_at')
+            ->update(['blocked_at' => now()]);
+
+        return to_route('settings.users.index')->with('status', 'users-blocked-bulk');
+    }
+
+    public function bulkUnblock(BulkUserRequest $request): RedirectResponse
+    {
+        User::query()
+            ->whereIn('id', $request->validated('ids'))
+            ->whereKeyNot(Auth::id())
+            ->whereNotNull('blocked_at')
+            ->update(['blocked_at' => null]);
+
+        return to_route('settings.users.index')->with('status', 'users-unblocked-bulk');
     }
 }

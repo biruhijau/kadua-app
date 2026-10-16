@@ -37,5 +37,13 @@ test('users can logout', function () {
     $response = $this->actingAs($user)->post('/auth/sign-out');
 
     $this->assertGuest();
-    $response->assertRedirect('/');
+    $response->assertRedirect(route('login'));
+});
+
+test('unverified user can logout without hitting the verification prompt', function () {
+    $user = User::factory()->unverified()->create();
+
+    $this->actingAs($user)->post('/auth/sign-out')->assertRedirect(route('login'));
+
+    $this->get('/auth/verify-email')->assertRedirect(route('login'));
 });

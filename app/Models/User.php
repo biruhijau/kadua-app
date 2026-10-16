@@ -28,7 +28,16 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return [
             'email_verified_at' => 'datetime',
+            'blocked_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Determine whether the account has been blocked by an administrator.
+     */
+    public function isBlocked(): bool
+    {
+        return $this->blocked_at !== null;
     }
 }

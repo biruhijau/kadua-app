@@ -18,9 +18,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/app/settings/users', [UserManagementController::class, 'index'])->middleware('permission:users.view')->name('settings.users.index');
     Route::get('/app/settings/users/create', [UserManagementController::class, 'create'])->middleware('permission:users.create')->name('settings.users.create');
     Route::post('/app/settings/users', [UserManagementController::class, 'store'])->middleware('permission:users.create')->name('settings.users.store');
+
+    /**
+     * User Management — Bulk Action
+     *
+     * Declared before the `{user}` routes so `bulk` is never captured by the
+     * route model binding.
+     */
+    Route::delete('/app/settings/users/bulk', [UserManagementController::class, 'bulkDestroy'])->middleware('permission:users.delete')->name('settings.users.bulk-destroy');
+    Route::post('/app/settings/users/bulk/block', [UserManagementController::class, 'bulkBlock'])->middleware('permission:users.update')->name('settings.users.bulk-block');
+    Route::post('/app/settings/users/bulk/unblock', [UserManagementController::class, 'bulkUnblock'])->middleware('permission:users.update')->name('settings.users.bulk-unblock');
+
     Route::get('/app/settings/users/{user}/edit', [UserManagementController::class, 'edit'])->middleware('permission:users.update')->name('settings.users.edit');
     Route::patch('/app/settings/users/{user}', [UserManagementController::class, 'update'])->middleware('permission:users.update')->name('settings.users.update');
     Route::delete('/app/settings/users/{user}', [UserManagementController::class, 'destroy'])->middleware('permission:users.delete')->name('settings.users.destroy');
+    Route::post('/app/settings/users/{user}/block', [UserManagementController::class, 'block'])->middleware('permission:users.update')->name('settings.users.block');
+    Route::post('/app/settings/users/{user}/unblock', [UserManagementController::class, 'unblock'])->middleware('permission:users.update')->name('settings.users.unblock');
 
     /**
      * Role Management

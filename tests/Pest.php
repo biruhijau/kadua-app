@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Permission;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -44,7 +47,14 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function makeManager(array $permissions, string $roleName = 'staff-manager'): User
 {
-    // ..
+    $manager = User::factory()->create();
+    $role = Role::findOrCreate($roleName, 'web');
+    $role->syncPermissions(
+        collect($permissions)->map(fn (string $permission) => Permission::findOrCreate($permission, 'web'))->all(),
+    );
+    $manager->assignRole($role);
+
+    return $manager;
 }

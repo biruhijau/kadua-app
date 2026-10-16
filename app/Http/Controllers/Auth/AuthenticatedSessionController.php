@@ -26,6 +26,18 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+        if ($request->user()->isBlocked()) {
+            Auth::guard('web')->logout();
+
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()
+                ->route('login')
+                ->with('status', __('Akun Anda telah diblokir. Anda tidak dapat masuk ke dalam sistem.'))
+                ->with('status_type', 'error');
+        }
+
         $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard', absolute: false));
@@ -42,6 +54,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('login');
     }
 }
