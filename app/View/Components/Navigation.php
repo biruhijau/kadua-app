@@ -28,6 +28,21 @@ class Navigation extends Component
                 'children' => [],
             ],
             [
+                'label' => __('Data Master'),
+                'href' => '#',
+                'active' => request()->routeIs('master.*'),
+                'permission' => null,
+                'children' => [
+                    [
+                        'label' => __('Kategori Produk'),
+                        'href' => route('master.product-categories.index'),
+                        'active' => request()->routeIs('master.product-categories.*'),
+                        'permission' => 'product-categories.view',
+                        'children' => [],
+                    ],
+                ],
+            ],
+            [
                 'label' => __('Pengaturan'),
                 'href' => '#',
                 'active' => false,

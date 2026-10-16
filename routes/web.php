@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\ProfileSessionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Master\ProductCategoryController;
 use App\Http\Controllers\Settings\RoleManagementController;
 use App\Http\Controllers\Settings\UserManagementController;
 use Illuminate\Support\Facades\Route;
@@ -11,6 +12,17 @@ Route::redirect('/', '/app');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/app', [DashboardController::class, 'index'])->middleware('permission:dashboard.view')->name('dashboard');
+
+    /**
+     * Product Category Management
+     */
+    Route::get('/app/master/product-categories', [ProductCategoryController::class, 'index'])->middleware('permission:product-categories.view')->name('master.product-categories.index');
+    Route::get('/app/master/product-categories/create', [ProductCategoryController::class, 'create'])->middleware('permission:product-categories.create')->name('master.product-categories.create');
+    Route::post('/app/master/product-categories', [ProductCategoryController::class, 'store'])->middleware('permission:product-categories.create')->name('master.product-categories.store');
+    Route::delete('/app/master/product-categories/bulk', [ProductCategoryController::class, 'bulkDestroy'])->middleware('permission:product-categories.delete')->name('master.product-categories.bulk-destroy');
+    Route::get('/app/master/product-categories/{productCategory}/edit', [ProductCategoryController::class, 'edit'])->middleware('permission:product-categories.update')->name('master.product-categories.edit')->where('productCategory', '[0-9a-fA-F-]{36}');
+    Route::patch('/app/master/product-categories/{productCategory}', [ProductCategoryController::class, 'update'])->middleware('permission:product-categories.update')->name('master.product-categories.update')->where('productCategory', '[0-9a-fA-F-]{36}');
+    Route::delete('/app/master/product-categories/{productCategory}', [ProductCategoryController::class, 'destroy'])->middleware('permission:product-categories.delete')->name('master.product-categories.destroy')->where('productCategory', '[0-9a-fA-F-]{36}');
 
     /**
      * User Management

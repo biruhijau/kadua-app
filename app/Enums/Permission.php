@@ -13,6 +13,10 @@ enum Permission: string
     case RolesCreate = 'roles.create';
     case RolesUpdate = 'roles.update';
     case RolesDelete = 'roles.delete';
+    case ProductCategoriesView = 'product-categories.view';
+    case ProductCategoriesCreate = 'product-categories.create';
+    case ProductCategoriesUpdate = 'product-categories.update';
+    case ProductCategoriesDelete = 'product-categories.delete';
 
     public function feature(): string
     {
@@ -20,6 +24,7 @@ enum Permission: string
             self::DashboardView => 'Beranda',
             self::UsersView, self::UsersCreate, self::UsersUpdate, self::UsersDelete => 'Pengguna',
             self::RolesView, self::RolesCreate, self::RolesUpdate, self::RolesDelete => 'Peran',
+            self::ProductCategoriesView, self::ProductCategoriesCreate, self::ProductCategoriesUpdate, self::ProductCategoriesDelete => 'Kategori Produk',
         };
     }
 
@@ -30,6 +35,10 @@ enum Permission: string
             self::UsersCreate, self::RolesCreate => 'Buat',
             self::UsersUpdate, self::RolesUpdate => 'Edit',
             self::UsersDelete, self::RolesDelete => 'Hapus',
+            self::ProductCategoriesView => 'Lihat',
+            self::ProductCategoriesCreate => 'Buat',
+            self::ProductCategoriesUpdate => 'Edit',
+            self::ProductCategoriesDelete => 'Hapus',
         };
     }
 }
