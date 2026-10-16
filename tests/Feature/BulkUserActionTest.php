@@ -3,6 +3,20 @@
 use App\Models\User;
 use Illuminate\Support\Str;
 
+test('bulk routes are not captured by the user model binding', function () {
+    // `bulk` must resolve to the bulk route, never to `DELETE /users/{user}`.
+    expect(route('settings.users.bulk-destroy'))->toContain('/users/bulk')
+        ->and(route('settings.users.bulk-block'))->toContain('/users/bulk/block')
+        ->and(route('settings.users.bulk-unblock'))->toContain('/users/bulk/unblock');
+
+    $manager = makeManager(['users.view', 'users.delete']);
+
+    // A 404 here would mean the `{user}` route swallowed the literal `bulk` path.
+    $this->actingAs($manager)
+        ->delete(route('settings.users.bulk-destroy'), ['ids' => []])
+        ->assertSessionHasErrors('ids');
+});
+
 test('authorized user can bulk delete selected users', function () {
     $manager = makeManager(['users.view', 'users.delete']);
     $targets = User::factory()->count(3)->create();
