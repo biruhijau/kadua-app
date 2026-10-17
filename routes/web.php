@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\ProfileSessionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Master\CategoryController;
+use App\Http\Controllers\Master\ProductController;
 use App\Http\Controllers\Settings\RoleManagementController;
 use App\Http\Controllers\Settings\UserManagementController;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/app/master/categories/{category}', [CategoryController::class, 'update'])->middleware('permission:categories.update')->name('master.categories.update')->where('category', '[0-9a-fA-F-]{36}');
     Route::patch('/app/master/categories/{category}/toggle-status', [CategoryController::class, 'toggleStatus'])->middleware('permission:categories.update')->name('master.categories.toggle-status')->where('category', '[0-9a-fA-F-]{36}');
     Route::delete('/app/master/categories/{category}', [CategoryController::class, 'destroy'])->middleware('permission:categories.delete')->name('master.categories.destroy')->where('category', '[0-9a-fA-F-]{36}');
+
+    Route::get('/app/master/products', [ProductController::class, 'index'])->middleware('permission:products.view')->name('master.products.index');
+    Route::get('/app/master/products/create', [ProductController::class, 'create'])->middleware('permission:products.create')->name('master.products.create');
+    Route::post('/app/master/products', [ProductController::class, 'store'])->middleware('permission:products.create')->name('master.products.store');
+    Route::delete('/app/master/products/bulk', [ProductController::class, 'bulkDestroy'])->middleware('permission:products.delete')->name('master.products.bulk-destroy');
+    Route::get('/app/master/products/{product}/edit', [ProductController::class, 'edit'])->middleware('permission:products.update')->name('master.products.edit')->whereUuid('product');
+    Route::patch('/app/master/products/{product}', [ProductController::class, 'update'])->middleware('permission:products.update')->name('master.products.update')->whereUuid('product');
+    Route::patch('/app/master/products/{product}/toggle-status', [ProductController::class, 'toggleStatus'])->middleware('permission:products.update')->name('master.products.toggle-status')->whereUuid('product');
+    Route::delete('/app/master/products/{product}', [ProductController::class, 'destroy'])->middleware('permission:products.delete')->name('master.products.destroy')->whereUuid('product');
 
     /**
      * User Management

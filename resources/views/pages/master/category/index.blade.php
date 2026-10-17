@@ -52,7 +52,6 @@
                             <th class="w-12 px-6 py-4"><x-table.select-all /></th>
                         @endcan
                         <th class="whitespace-nowrap px-6 py-4">{{ __('Nama') }}</th>
-                        <th class="whitespace-nowrap px-6 py-4">{{ __('Induk') }}</th>
                         <th class="whitespace-nowrap px-6 py-4">{{ __('Status') }}</th>
                         <th class="whitespace-nowrap px-6 py-4">{{ __('Dibuat') }}</th>
                         <th class="w-16 px-6 py-4"><span class="sr-only">{{ __('Aksi') }}</span></th>
@@ -67,9 +66,6 @@
                             @endcan
                             <td class="whitespace-nowrap px-6 py-4 font-medium text-black dark:text-white">
                                 {{ $category->name }}
-                            </td>
-                            <td class="whitespace-nowrap px-6 py-4">
-                                {{ $category->parent?->name ?? __('—') }}
                             </td>
                             <td class="whitespace-nowrap px-6 py-4">
                                 @if ($category->is_active)

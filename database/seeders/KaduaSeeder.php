@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Enums\Permission as PermissionEnum;
+use App\Models\NumberSequence;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
@@ -24,6 +25,11 @@ class KaduaSeeder extends Seeder
 
         $administrator = Role::findOrCreate('Administrator', 'web');
         $administrator->syncPermissions($permissions);
+
+        NumberSequence::firstOrCreate(
+            ['key' => 'product-number'],
+            ['prefix' => 'PRD-', 'next_number' => 1],
+        );
 
         User::updateOrCreate(
             ['email' => 'root@kadua.id'],

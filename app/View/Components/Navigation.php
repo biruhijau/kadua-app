@@ -40,6 +40,13 @@ class Navigation extends Component
                         'permission' => 'categories.view',
                         'children' => [],
                     ],
+                    [
+                        'label' => __('Produk'),
+                        'href' => route('master.products.index'),
+                        'active' => request()->routeIs('master.products.*'),
+                        'permission' => 'products.view',
+                        'children' => [],
+                    ],
                 ],
             ],
             [
